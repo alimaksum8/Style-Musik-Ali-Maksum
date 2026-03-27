@@ -144,7 +144,7 @@ export default function App() {
 
       // Step 1: Generate Prompt & Lyrics
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-exp", // Menggunakan model yang lebih stabil untuk browser
+        model: "gemini-3-flash-preview", // Menggunakan model yang direkomendasikan
         contents: [{ role: "user", parts: [{ text: userPrompt }] }],
         config: {
           systemInstruction,
