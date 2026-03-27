@@ -108,7 +108,20 @@ export default function App() {
     setResult(null);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      // Logika pengambilan API Key yang lebih kuat
+      let apiKey = process.env.GEMINI_API_KEY;
+      const fallbackKey = "AIzaSyCDru48H9fAEbCWF3-M3rpyco2yjXp55H4";
+
+      // Jika key dari env tidak valid, gunakan fallback
+      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
+        apiKey = fallbackKey;
+      }
+      
+      if (!apiKey || apiKey === "undefined") {
+        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key yang valid.");
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       
       const systemInstruction = `Anda adalah Music Producer AI profesional.
       Analisis lirik dan pilihan user. Buatlah JSON dengan field:
@@ -131,7 +144,7 @@ export default function App() {
 
       // Step 1: Generate Prompt & Lyrics
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.0-flash-exp", // Menggunakan model yang lebih stabil untuk browser
         contents: [{ role: "user", parts: [{ text: userPrompt }] }],
         config: {
           systemInstruction,
@@ -147,12 +160,24 @@ export default function App() {
         }
       });
 
-      const data = JSON.parse(response.text || '{}') as GeneratedResult;
+      if (!response.text) {
+        throw new Error("Model tidak memberikan respon teks.");
+      }
+
+      const data = JSON.parse(response.text) as GeneratedResult;
       setResult(data);
 
     } catch (error) {
-      console.error("Generation error:", error);
-      alert("Terjadi kesalahan saat membuat komposisi. Silakan coba lagi.");
+      console.error("Detailed Generation error:", error);
+      let errorMessage = "Terjadi kesalahan yang tidak diketahui.";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null) {
+        errorMessage = JSON.stringify(error);
+      }
+      
+      alert(`Kesalahan: ${errorMessage}\n\nTips: Pastikan koneksi internet stabil dan API Key valid.`);
     } finally {
       setLoading(false);
     }
