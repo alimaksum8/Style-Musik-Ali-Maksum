@@ -193,7 +193,7 @@ export default function App() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl md:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 mb-4 tracking-tight">
-              Music Prompt Architect
+              Ali Maksum
             </h1>
             <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
               Optimalkan lirik dan style musik untuk Suno & Udio dengan kekuatan AI.
