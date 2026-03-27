@@ -110,7 +110,7 @@ export default function App() {
     try {
       // Logika pengambilan API Key yang lebih kuat
       let apiKey = process.env.GEMINI_API_KEY;
-      const fallbackKey = "AIzaSyCDru48H9fAEbCWF3-M3rpyco2yjXp55H4";
+      const fallbackKey = "AIzaSyBsArzoR0Q_Y3_B2dCKyp36xWep3coaiog";
 
       // Jika key dari env tidak valid, gunakan fallback
       if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
