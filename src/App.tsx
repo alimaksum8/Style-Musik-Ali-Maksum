@@ -76,6 +76,7 @@ interface GeneratedResult {
 
 export default function App() {
   const [lyrics, setLyrics] = useState('');
+  const [modifyLyrics, setModifyLyrics] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({
     genres: [],
     intros: [],
@@ -131,11 +132,13 @@ export default function App() {
       1. "style": Prompt teknik musik Suno/Udio (Inggris).
       2. "formattedLyrics": Lirik dengan tag struktur [Verse], [Chorus], dll. 
       
-      ATURAN MODIFIKASI LIRIK:
+      ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK:
       - Jika satu baris terdiri dari 1 kata: JANGAN diubah.
       - Jika satu baris terdiri dari 3 atau 4 kata: Ubah 1 kata yang sesuai dan senada.
       - Jika satu baris terdiri dari 4 kata atau lebih: Ubah 2 kata yang sesuai dan senada.
-      - Pastikan lirik tetap puitis dan mengalir dengan baik.`;
+      - Pastikan lirik tetap puitis dan mengalir dengan baik.` : `ATURAN LIRIK:
+      - JANGAN mengubah kata-kata dalam lirik. Biarkan lirik tetap original sesuai input user.
+      - Anda hanya diperbolehkan menambahkan tag struktur seperti [Verse], [Chorus], [Bridge], dll.`}`;
 
       const userPrompt = `Lirik: "${lyrics}". 
       Genre: ${selectedOptions.genres.join(', ')}. 
@@ -212,11 +215,36 @@ export default function App() {
           <div className="lg:col-span-7 space-y-8">
             {/* Lyrics Input */}
             <section className="bg-[#1e293b] border border-[#334155] p-6 rounded-3xl shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-blue-500/10 rounded-lg">
-                  <TypeIcon className="w-6 h-6 text-blue-400" />
+              <div className="flex items-center justify-between gap-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-500/10 rounded-lg">
+                    <TypeIcon className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <h2 className="text-2xl font-bold tracking-tight">Lirik Lagu</h2>
                 </div>
-                <h2 className="text-2xl font-bold tracking-tight">Lirik Lagu</h2>
+                
+                <div className="flex items-center gap-1 bg-[#0f172a] p-1 rounded-xl border border-slate-700">
+                  <button
+                    onClick={() => setModifyLyrics(true)}
+                    className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${
+                      modifyLyrics 
+                        ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]" 
+                        : "text-slate-500 hover:text-slate-300"
+                    }`}
+                  >
+                    MODIFIKASI ON
+                  </button>
+                  <button
+                    onClick={() => setModifyLyrics(false)}
+                    className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${
+                      !modifyLyrics 
+                        ? "bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.4)]" 
+                        : "text-slate-500 hover:text-slate-300"
+                    }`}
+                  >
+                    ORIGINAL OFF
+                  </button>
+                </div>
               </div>
               <textarea
                 value={lyrics}
