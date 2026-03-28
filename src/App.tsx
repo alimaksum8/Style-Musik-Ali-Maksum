@@ -119,15 +119,9 @@ export default function App() {
     try {
       // Logika pengambilan API Key yang lebih kuat
       let apiKey = process.env.GEMINI_API_KEY;
-      const fallbackKey = "AIzaSyCxuepOvxphTD_rZ6IO9sigGlmwe5NZ1-o";
 
-      // Jika key dari env tidak valid, gunakan fallback
       if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
-        apiKey = fallbackKey;
-      }
-      
-      if (!apiKey || apiKey === "undefined") {
-        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key yang valid.");
+        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio.");
       }
 
       const ai = new GoogleGenAI({ apiKey });
