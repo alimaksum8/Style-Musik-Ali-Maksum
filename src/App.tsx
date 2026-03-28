@@ -148,39 +148,64 @@ export default function App() {
       Vokal: ${selectedOptions.vocals.join(', ')}.
       Tempo: ${selectedOptions.tempos.join(', ')}.`;
 
-      // Step 1: Generate Prompt & Lyrics with Fallback
-      const modelsToTry = ["gemini-3-flash-preview", "gemini-3.1-pro-preview"];
+      // Step 1: Generate Prompt & Lyrics with Fallback & Retry
+      const modelsToTry = [
+        "gemini-2.5-flash-preview", 
+        "gemini-3.1-flash-lite-preview",
+        "gemini-3-flash-preview", 
+        "gemini-3.1-pro-preview"
+      ];
+      
       let response = null;
       let lastError = null;
 
       for (const modelName of modelsToTry) {
-        try {
-          response = await ai.models.generateContent({
-            model: modelName,
-            contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-            config: {
-              systemInstruction,
-              responseMimeType: "application/json",
-              responseSchema: {
-                type: Type.OBJECT,
-                properties: {
-                  style: { type: Type.STRING },
-                  formattedLyrics: { type: Type.STRING }
-                },
-                required: ["style", "formattedLyrics"]
+        let retries = 0;
+        const maxRetries = 2;
+
+        while (retries <= maxRetries) {
+          try {
+            response = await ai.models.generateContent({
+              model: modelName,
+              contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+              config: {
+                systemInstruction,
+                responseMimeType: "application/json",
+                responseSchema: {
+                  type: Type.OBJECT,
+                  properties: {
+                    style: { type: Type.STRING },
+                    formattedLyrics: { type: Type.STRING }
+                  },
+                  required: ["style", "formattedLyrics"]
+                }
               }
+            });
+            if (response) break; 
+          } catch (err: any) {
+            lastError = err;
+            const is503 = err?.message?.includes("503") || err?.message?.includes("UNAVAILABLE");
+            
+            if (is503 && retries < maxRetries) {
+              retries++;
+              console.warn(`Model ${modelName} sibuk (503), mencoba ulang ke-${retries}...`);
+              await new Promise(resolve => setTimeout(resolve, 2000)); // Tunggu 2 detik
+              continue;
             }
-          });
-          if (response) break; // Berhasil, keluar dari loop
-        } catch (err) {
-          lastError = err;
-          console.warn(`Model ${modelName} gagal, mencoba model berikutnya...`, err);
-          continue;
+            
+            console.warn(`Model ${modelName} gagal (${err?.message}), mencoba model berikutnya...`);
+            break; // Lanjut ke model berikutnya di list modelsToTry
+          }
         }
+        if (response) break; // Jika sudah berhasil dengan satu model, berhenti
       }
 
       if (!response || !response.text) {
-        throw lastError || new Error("Semua model AI sedang sibuk. Silakan coba lagi dalam beberapa saat.");
+        const isQuotaError = lastError?.message?.includes("429") || lastError?.message?.includes("quota");
+        const finalMessage = isQuotaError 
+          ? "Kuota API Gratis Anda telah habis atau mencapai batas limit menit. Silakan tunggu 1-2 menit lalu coba lagi."
+          : "Semua model AI sedang sibuk karena trafik tinggi dari Google. Silakan coba lagi dalam beberapa saat.";
+        throw new Error(finalMessage);
       }
 
       const data = JSON.parse(response.text) as GeneratedResult;
