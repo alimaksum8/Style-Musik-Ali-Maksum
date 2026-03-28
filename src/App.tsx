@@ -23,37 +23,46 @@ import {
 const OPTIONS = {
   genres: [
     "Dangdut", "Koplo", "Campursari", "Keroncong", "Pop Indonesia", "Indie Indo", "Reggae", "Ska", "Rock", "Heavy Metal", "Death Metal", 
-    "Punk", "Pop Punk", "Synthwave", "Retrowave", "Lo-fi Hip Hop", "Trap", "Old School Rap", "R&B", "Soul", "Neo-soul", "Jazz", 
-    "Bossa Nova", "Swing", "Blues", "Folk", "Bluegrass", "Country", "Americana", "Classical", "Orchestra", "Chamber", 
-    "EDM", "Techno", "House", "Deep House", "Dubstep", "Future Bass", "Phonk", "K-Pop", "J-Pop", "J-Rock", "Anime Style", 
+    "Punk", "Pop Punk", "Synthwave", "Retrowave", "Lo-fi Hip Hop", "Trap", "Rap Klasik", "R&B", "Soul", "Neo-soul", "Jazz", 
+    "Bossa Nova", "Swing", "Blues", "Folk", "Bluegrass", "Country", "Americana", "Klasik", "Orkestra", "Chamber", 
+    "EDM", "Techno", "House", "Deep House", "Dubstep", "Future Bass", "Phonk", "K-Pop", "J-Pop", "J-Rock", "Gaya Anime", 
     "Gospel", "New Age", "Ambient", "Industrial", "Disco", "Funk", "Afrobeats", "Latin", "Salsa", "Flamenco"
   ],
   intros: [
-    "Biola", "Grand Piano", "Saxophone", "Distortion Guitar", "Electric Guitar", "Acoustic Percussion", "Solo Guitar Sustain", "Solo Guitar Bending", "Solo Guitar Vibrato", "Solo High Note / Screaming Guitar", "Solo Guitar Lead (Lead Guitar)"
+    "Biola", "Grand Piano", "Saksofon", "Gitar Distorsi", "Gitar Elektrik", "Perkusi Akustik", "Solo Gitar Sustain", "Solo Gitar Bending", "Solo Gitar Vibrato", "Solo Nada Tinggi / Gitar Menjerit", "Solo Gitar Lead"
   ],
   instruments: [
-    "Acoustic Guitar", "Electric Guitar", "Distortion Guitar", "Muted Guitar", "Slide Guitar", "12-String Guitar", "Nylon Guitar",
-    "Violin", "Viola", "Cello", "Double Bass", "Harp", "Banjo", "Ukulele", "Mandolin", "Sitar",
-    "Grand Piano", "Upright Piano", "Electric Piano", "Rhodes", "Hammond Organ", "Pipe Organ", "Accordion", "Celesta",
-    "Synthesizer", "Analog Synth", "Moog Bass", "Wobble Bass", "FM Synth", "Pad", "Arpeggio Synth",
-    "Trumpet", "Saxophone", "Trombone", "Tuba", "French Horn", "Flute", "Clarinet", "Oboe", "Bassoon", "Harmonica", "Bagpipes",
-    "Drums", "808 Bass", "TR-909", "Drum Machine", "Acoustic Percussion", "Cinematic Percussion", "Timpani", "Xylophone", "Marimba",
-    "Congas", "Bongos", "Tambourine", "Shaker", "Cowbell",
+    "Gitar Akustik", "Gitar Elektrik", "Gitar Distorsi", "Gitar Muted", "Gitar Slide", "Gitar 12-Senar", "Gitar Nilon",
+    "Biola", "Viola", "Cello", "Double Bass", "Harpa", "Banjo", "Ukulele", "Mandolin", "Sitar",
+    "Grand Piano", "Upright Piano", "Piano Elektrik", "Rhodes", "Organ Hammond", "Organ Pipa", "Akordeon", "Celesta",
+    "Synthesizer", "Synth Analog", "Moog Bass", "Wobble Bass", "FM Synth", "Pad", "Arpeggio Synth",
+    "Terompet", "Saksofon", "Trombon", "Tuba", "French Horn", "Seruling", "Klarinet", "Oboe", "Bassoon", "Harmonika", "Bagpipes",
+    "Drum", "808 Bass", "TR-909", "Drum Machine", "Perkusi Akustik", "Perkusi Sinematik", "Timpani", "Xilofon", "Marimba",
+    "Congas", "Bongos", "Tamborin", "Shaker", "Cowbell",
     "Gamelan", "Kendang", "Suling", "Angklung", "Koto", "Shamisen", "Erhu", "Tabla", "Djembe", "Didgeridoo"
   ],
   moods: [
-    "Epic", "Melancholic", "Uplifting", "Aggressive", "Dreamy", "Dark", "Energetic", "Cinematic", "Romantic", 
-    "Chill", "Spooky", "Nostalgic", "Hopeful", "Angry", "Calm", "Mysterious", "Ethereal", "Trippy", "Sad",
-    "Whimsical", "Lounge", "Grandiose", "Intense", "Peaceful", "Sultry", "Heroic", "Gothic", "Cheerful", "Anxious",
-    "Psychedelic", "Minimalist", "Sensual", "Sophisticated"
+    "Epik", "Melankolis", "Membangkitkan Semangat", "Agresif", "Bermimpi", "Gelap", "Enerjik", "Sinematik", "Romantis", 
+    "Santai", "Menyeramkan", "Nostalgia", "Penuh Harapan", "Marah", "Tenang", "Misterius", "Ethereal", "Trippy", "Sedih",
+    "Aneh", "Lounge", "Megah", "Intens", "Peaceful", "Seksi", "Heroik", "Gotik", "Ceria", "Cemas",
+    "Psikedelik", "Minimalis", "Sensual", "Canggih"
   ],
   vocals: [
-    "Male", "Female", "Raspy", "Opera", "Choral", "Whispery", "Soulful", "Duo", "High-pitched", "Screaming", 
-    "Deep Bass", "Auto-tune", "Vocaloid", "Rap", "Growl", "Breathy", "Harmonized", "Furry", "Kids Voice",
-    "Falsetto", "Vibrato", "Monotone", "Spoken Word", "Scat Singing", "Yodeling", "Belting", "Head Voice", "Chest Voice",
-    "Vocals Suprano", "Vocals Seriosa", "Vocals Orchestra", "Vocals Dangdut", "Vocals Slowrock Malaysia", "Chanting"
+    "Pria", "Wanita", "Serak", "Opera", "Paduan Suara", "Berbisik", "Soulful", "Duo", "Nada Tinggi", "Berteriak", 
+    "Bass Dalam", "Auto-tune", "Vocaloid", "Rap", "Growl", "Bernapas", "Harmonisasi", "Furry", "Suara Anak-anak",
+    "Falsetto", "Vibrato", "Monoton", "Kata-kata Lisan", "Scat Singing", "Yodeling", "Belting", "Head Voice", "Chest Voice",
+    "Vokal Sopran", "Vokal Seriosa", "Vokal Orkestra", "Vokal Dangdut", "Vokal Slowrock Malaysia", "Chanting"
   ],
-  tempos: ["40-60 BPM", "60-80 BPM", "80-100 BPM", "100-120 BPM", "Fast (140+ BPM)", "Very Fast (180+ BPM)"]
+  tempos: ["40-60 BPM", "60-80 BPM", "80-100 BPM", "100-120 BPM", "Cepat (140+ BPM)", "Sangat Cepat (180+ BPM)"]
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  genres: "Genre",
+  intros: "Intro",
+  instruments: "Instrumen",
+  moods: "Suasana / Mood",
+  vocals: "Vokal",
+  tempos: "Tempo"
 };
 
 // --- Types ---
@@ -110,7 +119,7 @@ export default function App() {
     try {
       // Logika pengambilan API Key yang lebih kuat
       let apiKey = process.env.GEMINI_API_KEY;
-      const fallbackKey = "AIzaSyBsArzoR0Q_Y3_B2dCKyp36xWep3coaiog";
+      const fallbackKey = "AIzaSyCxuepOvxphTD_rZ6IO9sigGlmwe5NZ1-o";
 
       // Jika key dari env tidak valid, gunakan fallback
       if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
@@ -138,7 +147,7 @@ export default function App() {
       Genre: ${selectedOptions.genres.join(', ')}. 
       Intro: ${selectedOptions.intros.join(', ')}. 
       Instrumen: ${selectedOptions.instruments.join(', ')}. 
-      Mood: ${selectedOptions.moods.join(', ')}.
+      Suasana/Mood: ${selectedOptions.moods.join(', ')}.
       Vokal: ${selectedOptions.vocals.join(', ')}.
       Tempo: ${selectedOptions.tempos.join(', ')}.`;
 
@@ -236,7 +245,7 @@ export default function App() {
                 {Object.entries(OPTIONS).map(([key, opts]) => (
                   <div key={key}>
                     <p className="text-xs font-black text-slate-500 uppercase mb-3 tracking-widest flex items-center gap-2">
-                      {key} <ChevronRight className="w-3 h-3" />
+                      {CATEGORY_LABELS[key] || key} <ChevronRight className="w-3 h-3" />
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {opts.map(opt => (
