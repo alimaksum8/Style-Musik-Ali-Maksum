@@ -148,26 +148,39 @@ export default function App() {
       Vokal: ${selectedOptions.vocals.join(', ')}.
       Tempo: ${selectedOptions.tempos.join(', ')}.`;
 
-      // Step 1: Generate Prompt & Lyrics
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview", // Menggunakan model yang direkomendasikan
-        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-        config: {
-          systemInstruction,
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.OBJECT,
-            properties: {
-              style: { type: Type.STRING },
-              formattedLyrics: { type: Type.STRING }
-            },
-            required: ["style", "formattedLyrics"]
-          }
-        }
-      });
+      // Step 1: Generate Prompt & Lyrics with Fallback
+      const modelsToTry = ["gemini-3-flash-preview", "gemini-3.1-pro-preview"];
+      let response = null;
+      let lastError = null;
 
-      if (!response.text) {
-        throw new Error("Model tidak memberikan respon teks.");
+      for (const modelName of modelsToTry) {
+        try {
+          response = await ai.models.generateContent({
+            model: modelName,
+            contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+            config: {
+              systemInstruction,
+              responseMimeType: "application/json",
+              responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                  style: { type: Type.STRING },
+                  formattedLyrics: { type: Type.STRING }
+                },
+                required: ["style", "formattedLyrics"]
+              }
+            }
+          });
+          if (response) break; // Berhasil, keluar dari loop
+        } catch (err) {
+          lastError = err;
+          console.warn(`Model ${modelName} gagal, mencoba model berikutnya...`, err);
+          continue;
+        }
+      }
+
+      if (!response || !response.text) {
+        throw lastError || new Error("Semua model AI sedang sibuk. Silakan coba lagi dalam beberapa saat.");
       }
 
       const data = JSON.parse(response.text) as GeneratedResult;
