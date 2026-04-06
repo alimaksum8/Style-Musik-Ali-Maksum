@@ -91,7 +91,9 @@ interface GeneratedResult {
 
 export default function App() {
   const [lyrics, setLyrics] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modifyLyrics, setModifyLyrics] = useState(true);
+  const [loadingYoutube, setLoadingYoutube] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({
     genres: [],
     intros: [],
@@ -114,6 +116,61 @@ export default function App() {
         return { ...prev, [category]: [...current, option] };
       }
     });
+  };
+
+  const analyzeYoutube = async () => {
+    if (!youtubeUrl.trim()) {
+      alert("Masukkan link YouTube!");
+      return;
+    }
+    setLoadingYoutube(true);
+    try {
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
+        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio.");
+      }
+      const ai = new GoogleGenAI({ apiKey });
+      
+      const systemInstruction = `Anda adalah Ali Maksum. Analisis video YouTube ini: ${youtubeUrl}.
+      Identifikasi genre, instrumen, mood, dan tempo yang ada di dalamnya. 
+      Pilih opsi yang paling cocok dari daftar kategori berikut:
+      Genres: ${OPTIONS.genres.join(', ')}
+      Instruments: ${OPTIONS.instruments.join(', ')}
+      Moods: ${OPTIONS.moods.join(', ')}
+      Tempos: ${OPTIONS.tempos.join(', ')}
+      
+      Berikan jawaban dalam format JSON:
+      {
+        "genres": ["Genre1", "Genre2"],
+        "instruments": ["Instrumen1"],
+        "moods": ["Mood1"],
+        "tempos": ["Tempo1"]
+      }`;
+
+      const response = await ai.models.generateContent({
+        model: "gemini-3.1-flash-lite-preview",
+        contents: [{ role: "user", parts: [{ text: "Analisis video ini." }] }],
+        config: { systemInstruction, responseMimeType: "application/json" }
+      });
+
+      if (response.text) {
+        const analysis = JSON.parse(response.text);
+        
+        // Reset and apply new options
+        const newOptions = { ...selectedOptions };
+        Object.keys(analysis).forEach(key => {
+          if (newOptions[key]) {
+            newOptions[key] = analysis[key];
+          }
+        });
+        setSelectedOptions(newOptions);
+      }
+    } catch (error) {
+      console.error("Analysis error:", error);
+      alert(error instanceof Error ? error.message : "Gagal menganalisis video.");
+    } finally {
+      setLoadingYoutube(false);
+    }
   };
 
   const handleCopy = (text: string, key: string) => {
@@ -262,6 +319,23 @@ export default function App() {
             <p className="text-slate-500 text-sm mt-2 font-semibold tracking-wider">
               Developer Ali Maksum
             </p>
+            
+            <div className="mt-6 flex flex-col md:flex-row gap-2 justify-center">
+              <input
+                type="text"
+                value={youtubeUrl}
+                onChange={(e) => setYoutubeUrl(e.target.value)}
+                placeholder="Masukkan link YouTube..."
+                className="px-4 py-2 rounded-xl bg-[#1e293b] border border-slate-700 text-sm text-white focus:ring-2 focus:ring-blue-500 outline-none w-full md:w-80"
+              />
+              <button
+                onClick={analyzeYoutube}
+                disabled={loadingYoutube}
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all disabled:opacity-50"
+              >
+                {loadingYoutube ? "Menganalisis..." : "Buat"}
+              </button>
+            </div>
           </motion.div>
         </header>
 
