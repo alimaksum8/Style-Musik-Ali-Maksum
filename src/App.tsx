@@ -29,7 +29,15 @@ const OPTIONS = {
     "Gospel", "New Age", "Ambient", "Industrial", "Disco", "Funk", "Afrobeats", "Latin", "Salsa", "Flamenco"
   ],
   intros: [
-    "Biola", "Grand Piano", "Saksofon", "Gitar Distorsi", "Gitar Elektrik", "Perkusi Akustik", "Solo Gitar Sustain", "Solo Gitar Bending", "Solo Gitar Vibrato", "Solo Nada Tinggi / Gitar Menjerit", "Solo Gitar Lead"
+    "Biola", "Grand Piano", "Saksofon", "Gitar Distorsi", "Gitar Elektrik", "Perkusi Akustik", "Solo Gitar Sustain", "Solo Gitar Bending", "Solo Gitar Vibrato", "Solo Nada Tinggi / Gitar Menjerit", "Solo Gitar Lead",
+    "Intro Tematik Main Theme Preview With Solo Gitar Sustain",
+    "Intro Tematik Chorus Preview With Solo Gitar Sustain",
+    "Intro Tematik Main Theme Preview With Solo Biola",
+    "Intro Tematik Chorus Preview With Solo Biola",
+    "Intro Tematik Main Theme Preview With Solo Gitar Lead",
+    "Intro Tematik Chorus Preview With Solo Gitar Lead",
+    "Intro Tematik Main Theme Preview With Saksofon",
+    "Intro Tematik Chorus Preview With Saksofon"
   ],
   instruments: [
     "Gitar Akustik", "Gitar Elektrik", "Gitar Distorsi", "Gitar Muted", "Gitar Slide", "Gitar 12-Senar", "Gitar Nilon",
