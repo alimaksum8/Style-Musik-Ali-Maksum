@@ -55,6 +55,12 @@ const OPTIONS = {
     "Aneh", "Lounge", "Megah", "Intens", "Peaceful", "Seksi", "Heroik", "Gotik", "Ceria", "Cemas",
     "Psikedelik", "Minimalis", "Sensual", "Canggih"
   ],
+  emotions: [
+    "Appassionato (Penuh Gairah)", "Dolce (Manis & Lembut)", "Lacrimoso (Penuh Air Mata)", "Con Fuoco (Berapi-api)",
+    "Cantabile (Seperti Menyanyi)", "Maestoso (Agung/Mulia)", "Espressivo (Ekspresif)", "Agitato (Gelisah/Cepat)",
+    "Sotto Voce (Berbisik)", "Grave (Serius & Berat)", "Leggiero (Ringan & Halus)", "Doloroso (Pedih/Sedih)",
+    "Furioso (Sangat Marah)", "Amoroso (Penuh Kasih)", "Misterioso (Misterius)"
+  ],
   vocals: [
     "Pria", "Wanita", "Serak", "Opera", "Paduan Suara", "Berbisik", "Soulful", "Duo", "Nada Tinggi", "Berteriak", 
     "Bass Dalam", "Auto-tune", "Vocaloid", "Rap", "Growl", "Bernapas", "Harmonisasi", "Furry", "Suara Anak-anak",
@@ -69,6 +75,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   intros: "Intro",
   instruments: "Instrumen",
   moods: "Suasana / Mood",
+  emotions: "Ekspresi Emosional",
   vocals: "Vokal",
   tempos: "Tempo"
 };
@@ -90,6 +97,7 @@ export default function App() {
     intros: [],
     instruments: [],
     moods: [],
+    emotions: [],
     vocals: [],
     tempos: []
   });
@@ -153,6 +161,7 @@ export default function App() {
       Intro: ${selectedOptions.intros.join(', ')}. 
       Instrumen: ${selectedOptions.instruments.join(', ')}. 
       Suasana/Mood: ${selectedOptions.moods.join(', ')}.
+      Ekspresi Emosional: ${selectedOptions.emotions.join(', ')}.
       Vokal: ${selectedOptions.vocals.join(', ')}.
       Tempo: ${selectedOptions.tempos.join(', ')}.`;
 
