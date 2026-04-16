@@ -289,29 +289,17 @@ export default function App() {
       4. JANGAN memotong baris di tengah kalimat secara acak.
       5. Pastikan output terlihat rapi dan profesional untuk langsung di-copy ke Suno/Udio.
 
-      ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STYLE):
-      - WAJIB mengubah penulisan lirik menjadi gaya fonetik/suku kata yang dipisahkan tanda hubung (-).
-      - Gunakan pola perpanjangan vokal: 'u' -> 'uw', 'i' -> 'iy', 'a' -> 'aw' (pada akhir suku kata yang ditekankan).
-      - ATURAN KHUSUS KATA "PUNYA":
-        * "punya" -> "puw- nya"
-        * "mempunyai" -> "mem- puw- nyai"
-        * "punyaku" -> "puw- nya- kuw"
-      - CONTOH FORMAT WAJIB:
-        [Verse 1]
-        Mem- puw- nyai se- o- rang te- man se- per- tuw- muw
-        Se- um- pa- ma duw- riy me- niy- kam ha- tiy
-      - Pastikan spasi antar kata tetap ada, hanya suku kata di dalam kata yang dipisah tanda hubung.
-      - Meskipun dalam gaya fonetik, ATURAN CLEAN FORMATTING di atas tetap prioritas utama.` : ''}
+      ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STEALTH):
+      - TUJUAN: Menghindari deteksi hak cipta (Copyright Detection) TANPA mengubah kata asli.
+      - CARA KERJA: Sistem deteksi Suno/Udio mencari kecocokan string teks utuh. Dengan memecah kata menjadi suku kata fonetik (misal: "Mem- puw- nyai"), kita memutus pola deteksi teks otomatis namun AI musik tetap melafalkannya secara akurat.
+      - WAJIB memecah setiap kata menjadi suku kata yang dipisahkan tanda hubung (-).
+      - Gunakan pola perpanjangan vokal ('uw', 'iy', 'aw') untuk membantu pelafalan alami.
+      - Meskipun dalam gaya fonetik, lirik harus tetap merepresentasikan kata aslinya secara bunyi.` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
-      - Analisis rima dan meteran lirik.
-      - Jika satu baris terdiri dari 1 kata: JANGAN diubah.
-      - Jika satu baris terdiri dari 3-4 kata: Ganti 1 kata dengan sinonim yang lebih puitis atau berima lebih baik.
-      - Jika satu baris terdiri dari 5+ kata: Ganti 2 kata untuk meningkatkan aliran emosional.
-      - Pastikan makna asli tetap terjaga namun terdengar lebih profesional.` : `ATURAN LIRIK (ORIGINAL):
-      - JANGAN mengubah kata-kata dalam lirik (kecuali jika BOCIL MODE aktif, maka ikuti aturan fonetik).
-      - Biarkan lirik tetap original sesuai input user.
-      - Anda hanya diperbolehkan menambahkan tag struktur.`}`;
+      - Ganti kata dengan sinonim jika user mengizinkan optimasi lirik untuk rima yang lebih baik.` : `ATURAN LIRIK (ORIGINAL - STRICT):
+      - **DILARANG KERAS** mengubah kata asli atau lirik asli (kecuali pemenggalan fonetik jika Bocil Mode aktif).
+      - Pertahankan setiap kata sesuai input user secara 100%. pemenuhan anti-copyright dilakukan murni melalui teknik pemenggalan fonetik Bocil Mode.`}`;
 
       const userPrompt = `Lirik: "${lyrics}". 
       Genre: ${selectedOptions.genres.join(', ')}. 
