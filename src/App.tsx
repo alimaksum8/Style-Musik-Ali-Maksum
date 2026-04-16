@@ -292,9 +292,13 @@ export default function App() {
       ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STYLE):
       - WAJIB mengubah penulisan lirik menjadi gaya fonetik/suku kata yang dipisahkan tanda hubung (-).
       - Gunakan pola perpanjangan vokal: 'u' -> 'uw', 'i' -> 'iy', 'a' -> 'aw' (pada akhir suku kata yang ditekankan).
+      - ATURAN KHUSUS KATA "PUNYA":
+        * "punya" -> "puw- nya"
+        * "mempunyai" -> "mem- puw- nyai"
+        * "punyaku" -> "puw- nya- kuw"
       - CONTOH FORMAT WAJIB:
         [Verse 1]
-        Mem- puwn- ya- iy se- o- rang te- man se- per- tuw- muw
+        Mem- puw- nyai se- o- rang te- man se- per- tuw- muw
         Se- um- pa- ma duw- riy me- niy- kam ha- tiy
       - Pastikan spasi antar kata tetap ada, hanya suku kata di dalam kata yang dipisah tanda hubung.
       - Meskipun dalam gaya fonetik, ATURAN CLEAN FORMATTING di atas tetap prioritas utama.` : ''}
