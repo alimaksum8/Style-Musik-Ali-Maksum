@@ -281,16 +281,19 @@ export default function App() {
       - Tambahkan petunjuk vokal di dalam tag jika perlu (misal: [Chorus: Powerful Vocals]).
       - Jika user memilih "Intro Tematik Main Theme Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi utama dimainkan oleh instrumen tersebut.
       - Jika user memilih "Intro Tematik Chorus Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi chorus dimainkan oleh instrumen tersebut sebagai teaser.
-      - WAJIB memberikan baris baru (line break) yang jelas antar bait dan antar baris lirik. JANGAN menggabungkan semua lirik dalam satu paragraf.
       
+      CLEAN FORMATTING RULES (WAJIB):
+      1. Satiap [Tag] (seperti [Verse], [Chorus]) HARUS berada di barisnya sendiri.
+      2. Berikan 2x ENTER (baris kosong) sebelum setiap [Tag] untuk memisahkan bait secara visual.
+      3. Satu baris lirik di input = SATU baris lirik di output. JANGAN digabung.
+      4. JANGAN memotong baris di tengah kalimat secara acak.
+      5. Pastikan output terlihat rapi dan profesional untuk langsung di-copy ke Suno/Udio.
+
       ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STYLE):
-      - WAJIB mengubah penulisan lirik menjadi gaya fonetik/suku kata untuk pengucapan AI yang lebih jelas.
-      - Gunakan tanda hubung (-) untuk memisahkan suku kata.
-      - Ubah vokal agar lebih panjang: 'u' menjadi 'uw', 'i' menjadi 'iy', 'a' menjadi 'aw' (jika perlu).
-      - Contoh: "Kujalani hubungan rumit" -> "Kuw- ja- laniy huw- bungan ruw- mit".
-      - Contoh: "sakit" -> "sa- kiyt", "istana" -> "is- tana".
-      - Pastikan seluruh lirik mengikuti pola fonetik ini.
-      - TETAP pertahankan struktur baris lirik asli, jangan menggabungkan baris.` : ''}
+      - Tetap gunakan gaya fonetik/suku kata (Kuw- ja- la- niy).
+      - Gunakan tanda hubung (-) untuk memisahkan setiap suku kata.
+      - Pastikan spasi antar kata tetap terjaga.
+      - Meskipun dalam gaya fonetik, ATURAN CLEAN FORMATTING di atas tetap prioritas utama (tetap rapi baris demi baris).` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Analisis rima dan meteran lirik.
