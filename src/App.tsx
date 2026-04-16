@@ -283,17 +283,21 @@ export default function App() {
       - Jika user memilih "Intro Tematik Chorus Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi chorus dimainkan oleh instrumen tersebut sebagai teaser.
       
       CLEAN FORMATTING RULES (WAJIB):
-      1. Satiap [Tag] (seperti [Verse], [Chorus]) HARUS berada di barisnya sendiri.
-      2. Berikan 2x ENTER (baris kosong) sebelum setiap [Tag] untuk memisahkan bait secara visual.
+      1. Setiap [Tag] (seperti [Verse], [Chorus]) HARUS berada di barisnya sendiri.
+      2. Berikan 1 baris kosong sebelum setiap [Tag] untuk memisahkan bait.
       3. Satu baris lirik di input = SATU baris lirik di output. JANGAN digabung.
       4. JANGAN memotong baris di tengah kalimat secara acak.
       5. Pastikan output terlihat rapi dan profesional untuk langsung di-copy ke Suno/Udio.
 
       ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STYLE):
-      - Tetap gunakan gaya fonetik/suku kata (Kuw- ja- la- niy).
-      - Gunakan tanda hubung (-) untuk memisahkan setiap suku kata.
-      - Pastikan spasi antar kata tetap terjaga.
-      - Meskipun dalam gaya fonetik, ATURAN CLEAN FORMATTING di atas tetap prioritas utama (tetap rapi baris demi baris).` : ''}
+      - WAJIB mengubah penulisan lirik menjadi gaya fonetik/suku kata yang dipisahkan tanda hubung (-).
+      - Gunakan pola perpanjangan vokal: 'u' -> 'uw', 'i' -> 'iy', 'a' -> 'aw' (pada akhir suku kata yang ditekankan).
+      - CONTOH FORMAT WAJIB:
+        [Verse 1]
+        Mem- puwn- ya- iy se- o- rang te- man se- per- tuw- muw
+        Se- um- pa- ma duw- riy me- niy- kam ha- tiy
+      - Pastikan spasi antar kata tetap ada, hanya suku kata di dalam kata yang dipisah tanda hubung.
+      - Meskipun dalam gaya fonetik, ATURAN CLEAN FORMATTING di atas tetap prioritas utama.` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Analisis rima dan meteran lirik.
