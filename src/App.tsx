@@ -179,34 +179,39 @@ export default function App() {
       }`;
 
       const modelsToTry = [
-        "gemini-3.1-pro-preview",
-        "gemini-3-flash-preview",
-        "gemini-3.1-flash-lite-preview"
+        { name: "gemini-3.1-pro-preview", useSearch: true },
+        { name: "gemini-3-flash-preview", useSearch: true },
+        { name: "gemini-3.1-flash-lite-preview", useSearch: true },
+        { name: "gemini-3.1-flash-lite-preview", useSearch: false } // Last resort: No search
       ];
 
       let response = null;
       let lastError = null;
 
-      for (const modelName of modelsToTry) {
+      for (const config of modelsToTry) {
         try {
+          const genConfig: any = { 
+            systemInstruction, 
+            responseMimeType: "application/json"
+          };
+          
+          if (config.useSearch) {
+            genConfig.tools = [{ googleSearch: {} }];
+          }
+
           response = await ai.models.generateContent({
-            model: modelName,
-            contents: [{ role: "user", parts: [{ text: `Tolong cari informasi tentang video YouTube ini: ${youtubeUrl} dan berikan analisis musiknya sesuai kategori yang diminta.` }] }],
-            config: { 
-              systemInstruction, 
-              responseMimeType: "application/json",
-              tools: [{ googleSearch: {} }]
-            }
+            model: config.name,
+            contents: [{ role: "user", parts: [{ text: `Tolong analisis video YouTube ini: ${youtubeUrl}. ${config.useSearch ? 'Gunakan Google Search untuk hasil akurat.' : 'Analisis berdasarkan pengetahuan Anda.'}` }] }],
+            config: genConfig
           });
-          if (response) break;
+          
+          if (response && response.text) break;
         } catch (err: any) {
           lastError = err;
-          console.warn(`Model ${modelName} gagal analisis:`, err.message);
-          // Jika error 429 (quota), lanjut ke model berikutnya
-          if (err.message?.includes("429") || err.message?.includes("quota")) {
-            continue;
-          }
-          // Jika error lain, tetap coba model berikutnya
+          console.warn(`Model ${config.name} (${config.useSearch ? 'with' : 'without'} search) gagal:`, err.message);
+          
+          // Wait 1 second before next attempt to avoid rapid firing
+          await new Promise(resolve => setTimeout(resolve, 1000));
           continue;
         }
       }
@@ -214,7 +219,7 @@ export default function App() {
       if (!response || !response.text) {
         const isQuotaError = lastError?.message?.includes("429") || lastError?.message?.includes("quota");
         throw new Error(isQuotaError 
-          ? "Kuota analisis YouTube sedang penuh. Silakan tunggu 1 menit lalu coba lagi." 
+          ? "Kuota API Gemini sedang sangat sibuk. Silakan tunggu beberapa saat atau coba ganti link." 
           : "Gagal menganalisis video. Pastikan link YouTube valid.");
       }
 
