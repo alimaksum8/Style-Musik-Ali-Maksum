@@ -281,6 +281,7 @@ export default function App() {
       - Tambahkan petunjuk vokal di dalam tag jika perlu (misal: [Chorus: Powerful Vocals]).
       - Jika user memilih "Intro Tematik Main Theme Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi utama dimainkan oleh instrumen tersebut.
       - Jika user memilih "Intro Tematik Chorus Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi chorus dimainkan oleh instrumen tersebut sebagai teaser.
+      - WAJIB memberikan baris baru (line break) yang jelas antar bait dan antar baris lirik. JANGAN menggabungkan semua lirik dalam satu paragraf.
       
       ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STYLE):
       - WAJIB mengubah penulisan lirik menjadi gaya fonetik/suku kata untuk pengucapan AI yang lebih jelas.
@@ -288,7 +289,8 @@ export default function App() {
       - Ubah vokal agar lebih panjang: 'u' menjadi 'uw', 'i' menjadi 'iy', 'a' menjadi 'aw' (jika perlu).
       - Contoh: "Kujalani hubungan rumit" -> "Kuw- ja- laniy huw- bungan ruw- mit".
       - Contoh: "sakit" -> "sa- kiyt", "istana" -> "is- tana".
-      - Pastikan seluruh lirik mengikuti pola fonetik ini.` : ''}
+      - Pastikan seluruh lirik mengikuti pola fonetik ini.
+      - TETAP pertahankan struktur baris lirik asli, jangan menggabungkan baris.` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Analisis rima dan meteran lirik.
