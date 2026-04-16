@@ -102,6 +102,7 @@ export default function App() {
   const [lyrics, setLyrics] = useState('');
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modifyLyrics, setModifyLyrics] = useState(true);
+  const [isBocilMode, setIsBocilMode] = useState(false);
   const [loadingYoutube, setLoadingYoutube] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({
     genres: [],
@@ -282,13 +283,22 @@ export default function App() {
       - Gunakan tag struktur standar: [Intro], [Verse 1], [Chorus], [Verse 2], [Bridge], [Outro], [End].
       - Tambahkan petunjuk vokal di dalam tag jika perlu (misal: [Chorus: Powerful Vocals]).
       
+      ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STYLE):
+      - WAJIB mengubah penulisan lirik menjadi gaya fonetik/suku kata untuk pengucapan AI yang lebih jelas.
+      - Gunakan tanda hubung (-) untuk memisahkan suku kata.
+      - Ubah vokal agar lebih panjang: 'u' menjadi 'uw', 'i' menjadi 'iy', 'a' menjadi 'aw' (jika perlu).
+      - Contoh: "Kujalani hubungan rumit" -> "Kuw- ja- laniy huw- bungan ruw- mit".
+      - Contoh: "sakit" -> "sa- kiyt", "istana" -> "is- tana".
+      - Pastikan seluruh lirik mengikuti pola fonetik ini.` : ''}
+
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Analisis rima dan meteran lirik.
       - Jika satu baris terdiri dari 1 kata: JANGAN diubah.
       - Jika satu baris terdiri dari 3-4 kata: Ganti 1 kata dengan sinonim yang lebih puitis atau berima lebih baik.
       - Jika satu baris terdiri dari 5+ kata: Ganti 2 kata untuk meningkatkan aliran emosional.
       - Pastikan makna asli tetap terjaga namun terdengar lebih profesional.` : `ATURAN LIRIK (ORIGINAL):
-      - JANGAN mengubah kata-kata dalam lirik. Biarkan lirik tetap original sesuai input user.
+      - JANGAN mengubah kata-kata dalam lirik (kecuali jika BOCIL MODE aktif, maka ikuti aturan fonetik).
+      - Biarkan lirik tetap original sesuai input user.
       - Anda hanya diperbolehkan menambahkan tag struktur.`}`;
 
       const userPrompt = `Lirik: "${lyrics}". 
@@ -489,6 +499,16 @@ export default function App() {
                 </div>
                 
                 <div className="flex items-center gap-1 bg-black/40 p-1.5 rounded-2xl border border-white/5">
+                  <button
+                    onClick={() => setIsBocilMode(!isBocilMode)}
+                    className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
+                      isBocilMode 
+                        ? "bg-amber-500 text-black shadow-lg shadow-amber-500/20" 
+                        : "text-slate-500 hover:text-slate-300"
+                    }`}
+                  >
+                    BOCIL {isBocilMode ? 'ON' : 'OFF'}
+                  </button>
                   <button
                     onClick={() => setModifyLyrics(true)}
                     className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
