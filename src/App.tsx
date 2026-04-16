@@ -178,15 +178,45 @@ export default function App() {
         "tempos": ["Tempo1"]
       }`;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3.1-pro-preview",
-        contents: [{ role: "user", parts: [{ text: `Tolong cari informasi tentang video YouTube ini: ${youtubeUrl} dan berikan analisis musiknya sesuai kategori yang diminta.` }] }],
-        config: { 
-          systemInstruction, 
-          responseMimeType: "application/json",
-          tools: [{ googleSearch: {} }]
+      const modelsToTry = [
+        "gemini-3.1-pro-preview",
+        "gemini-3-flash-preview",
+        "gemini-3.1-flash-lite-preview"
+      ];
+
+      let response = null;
+      let lastError = null;
+
+      for (const modelName of modelsToTry) {
+        try {
+          response = await ai.models.generateContent({
+            model: modelName,
+            contents: [{ role: "user", parts: [{ text: `Tolong cari informasi tentang video YouTube ini: ${youtubeUrl} dan berikan analisis musiknya sesuai kategori yang diminta.` }] }],
+            config: { 
+              systemInstruction, 
+              responseMimeType: "application/json",
+              tools: [{ googleSearch: {} }]
+            }
+          });
+          if (response) break;
+        } catch (err: any) {
+          lastError = err;
+          console.warn(`Model ${modelName} gagal analisis:`, err.message);
+          // Jika error 429 (quota), lanjut ke model berikutnya
+          if (err.message?.includes("429") || err.message?.includes("quota")) {
+            continue;
+          }
+          // Jika error lain, tetap coba model berikutnya
+          continue;
         }
-      });
+      }
+
+      if (!response || !response.text) {
+        const isQuotaError = lastError?.message?.includes("429") || lastError?.message?.includes("quota");
+        throw new Error(isQuotaError 
+          ? "Kuota analisis YouTube sedang penuh. Silakan tunggu 1 menit lalu coba lagi." 
+          : "Gagal menganalisis video. Pastikan link YouTube valid.");
+      }
 
       if (response.text) {
         const analysis = JSON.parse(response.text);
@@ -438,7 +468,7 @@ export default function App() {
           <div className="lg:col-span-8 space-y-10">
             {/* Lyrics Input */}
             <section className="bg-[#1e293b]/40 backdrop-blur-md border border-white/5 p-8 rounded-[2rem] shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
                 <TypeIcon className="w-32 h-32" />
               </div>
               
@@ -456,23 +486,23 @@ export default function App() {
                 <div className="flex items-center gap-1 bg-black/40 p-1.5 rounded-2xl border border-white/5">
                   <button
                     onClick={() => setModifyLyrics(true)}
-                    className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all ${
+                    className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
                       modifyLyrics 
                         ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
                         : "text-slate-500 hover:text-slate-300"
                     }`}
                   >
-                    OPTIMASI ON
+                    OPTIMASI AI
                   </button>
                   <button
                     onClick={() => setModifyLyrics(false)}
-                    className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all ${
+                    className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
                       !modifyLyrics 
-                        ? "bg-slate-700 text-white" 
+                        ? "bg-slate-700 text-white shadow-lg shadow-slate-700/20" 
                         : "text-slate-500 hover:text-slate-300"
                     }`}
                   >
-                    ASLI OFF
+                    LIRIK ASLI
                   </button>
                 </div>
               </div>
