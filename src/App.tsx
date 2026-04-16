@@ -39,11 +39,7 @@ const OPTIONS = {
     "Intro Tematik Main Theme Preview With Solo Gitar Sustain",
     "Intro Tematik Chorus Preview With Solo Gitar Sustain",
     "Intro Tematik Main Theme Preview With Solo Biola",
-    "Intro Tematik Chorus Preview With Solo Biola",
-    "Intro Tematik Main Theme Preview With Solo Gitar Lead",
-    "Intro Tematik Chorus Preview With Solo Gitar Lead",
-    "Intro Tematik Main Theme Preview With Saksofon",
-    "Intro Tematik Chorus Preview With Saksofon"
+    "Intro Tematik Chorus Preview With Solo Biola"
   ],
   instruments: [
     "Gitar Akustik", "Gitar Elektrik", "Gitar Distorsi", "Gitar Muted", "Gitar Slide", "Gitar 12-Senar", "Gitar Nilon",
@@ -278,10 +274,13 @@ export default function App() {
       - Gunakan terminologi musik profesional (misal: "staccato strings", "analog warm synths", "syncopated rhythm").
       - Gabungkan genre, mood, instrumen, dan tempo menjadi satu paragraf deskriptif yang koheren dalam bahasa Inggris.
       - Fokus pada tekstur suara, dinamika, dan atmosfer.
+      - Jika user memilih "Intro Tematik ...", pastikan prompt mendeskripsikan intro instrumen tersebut secara mendetail sebagai pembuka lagu.
       
       LYRIC STRUCTURE GUIDELINES:
       - Gunakan tag struktur standar: [Intro], [Verse 1], [Chorus], [Verse 2], [Bridge], [Outro], [End].
       - Tambahkan petunjuk vokal di dalam tag jika perlu (misal: [Chorus: Powerful Vocals]).
+      - Jika user memilih "Intro Tematik Main Theme Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi utama dimainkan oleh instrumen tersebut.
+      - Jika user memilih "Intro Tematik Chorus Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi chorus dimainkan oleh instrumen tersebut sebagai teaser.
       
       ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STYLE):
       - WAJIB mengubah penulisan lirik menjadi gaya fonetik/suku kata untuk pengucapan AI yang lebih jelas.
