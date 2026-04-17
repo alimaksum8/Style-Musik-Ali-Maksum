@@ -99,6 +99,7 @@ export default function App() {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modifyLyrics, setModifyLyrics] = useState(true);
   const [isBocilMode, setIsBocilMode] = useState(false);
+  const [selectedDuration, setSelectedDuration] = useState("4 Menit");
   const [loadingYoutube, setLoadingYoutube] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({
     genres: [],
@@ -278,7 +279,17 @@ export default function App() {
       
       LYRIC STRUCTURE GUIDELINES:
       - Gunakan tag struktur standar: [Intro], [Verse 1], [Chorus], [Verse 2], [Bridge], [Outro], [End].
-      - Tambahkan petunjuk vokal di dalam tag jika perlu (misal: [Chorus: Powerful Vocals]).
+      - **WAJIB** mencantumkan instruksi musik lengkap di dalam setiap tag dengan format: [Tag: Instrument(s), Melody Character, Vocal Style, Tempo].
+      - **INSTRUMEN**: Sebutkan instrumen apa yang dominan di bagian tersebut (pilih dari pilihan user).
+      - **MELODY**: Deskripsikan bunyi nada/karakter melodi (misal: "mellow melodic", "aggressive riffs", "staccato patterns").
+      - **VOCALS**: Deskripsikan gaya vokal spesifik untuk bagian itu (misal: "whisper vocals", "belting", "harmonized").
+      - **TEMPO RULES**: 
+        * Gunakan nilai BPM spesifik di dalam setiap tag. 
+        * Jika user memilih range (misal: 40-60 bpm), pilih angka BEBAS di dalam range tersebut (misal: 52 bpm). Jangan kurang dari 40 dan jangan lebih dari 60.
+        * Jika user memilih beberapa range (misal: 40-60 bpm DAN 100-120 bpm), Anda boleh berganti tempo antar bagian (misal: Verse di 55 bpm, Chorus di 110 bpm) asalkan tetap di dalam salah satu range yang dipilih.
+      - **DURATION & LENGTH RULES**:
+        * Target Durasi: ${selectedDuration}.
+        * Jika durasi 6-8 menit, Anda **WAJIB** memperpanjang lirik dengan menambahkan banyak [Instrumental Break], [Instrumental Solo], [Bridge] tambahan, pengulangan Chorus yang bervariasi (misal: [Outro Chorus: Fading]), serta memperpanjang [Intro] dan [Outro]. Pastikan struktur terasa logis untuk durasi yang diminta.
       - Jika user memilih "Intro Tematik Main Theme Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi utama dimainkan oleh instrumen tersebut.
       - Jika user memilih "Intro Tematik Chorus Preview With Solo [Instrument]", buatlah tag [Intro] yang mendeskripsikan melodi chorus dimainkan oleh instrumen tersebut sebagai teaser.
       
@@ -308,7 +319,8 @@ export default function App() {
       Suasana/Mood: ${selectedOptions.moods.join(', ')}.
       Ekspresi Emosional: ${selectedOptions.emotions.join(', ')}.
       Vokal: ${selectedOptions.vocals.join(', ')}.
-      Tempo: ${selectedOptions.tempos.join(', ')}.`;
+      Tempo: ${selectedOptions.tempos.join(', ')}.
+      Target Durasi: ${selectedDuration}.`;
 
       // Step 1: Generate Prompt & Lyrics with Fallback & Retry
       const modelsToTry = [
@@ -498,7 +510,25 @@ export default function App() {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-1 bg-black/40 p-1.5 rounded-2xl border border-white/5">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 bg-black/40 p-1 rounded-2xl border border-white/5 mr-2">
+                    <span className="text-[10px] font-black text-slate-500 uppercase px-3">Durasi</span>
+                    {["4 Menit", "5 Menit", "6 Menit", "7 Menit", "8 Menit"].map((dur) => (
+                      <button
+                        key={dur}
+                        onClick={() => setSelectedDuration(dur)}
+                        className={`px-3 py-1.5 rounded-xl text-[9px] font-black transition-all cursor-pointer ${
+                          selectedDuration === dur
+                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                            : "text-slate-500 hover:text-slate-300"
+                        }`}
+                      >
+                        {dur.split(" ")[0]}M
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-1 bg-black/40 p-1.5 rounded-2xl border border-white/5">
                   <button
                     onClick={() => setIsBocilMode(!isBocilMode)}
                     className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
@@ -531,6 +561,7 @@ export default function App() {
                   </button>
                 </div>
               </div>
+            </div>
               <textarea
                 value={lyrics}
                 onChange={(e) => setLyrics(e.target.value)}
