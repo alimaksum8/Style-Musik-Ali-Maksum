@@ -206,24 +206,36 @@ export default function App() {
   const [copyStatus, setCopyStatus] = useState<Record<string, boolean>>({});
 
   const injectStealth = (text: string) => {
-    // Menyisipkan ZWNJ (Zero Width Non-Joiner) agar tulisan terlihat 100% normal
-    // namun secara data teks berbeda, sehingga lolos filter Suno/Udio/Yolly.
+    // Zero-Width characters to break string matching filters
+    const ZWNJ = '\u200C'; // Zero Width Non-Joiner
+    const ZWS = '\u200B';  // Zero Width Space
+    
     return text.split('\n').map(line => {
-      // Lewati baris yang merupakan [Tag] musik
+      // Skip [Tag] lines (they need to stay readable for the AI system)
       if (line.trim().startsWith('[') && line.trim().endsWith(']')) return line;
       
       return line.split(' ').map(word => {
+        // Skip words with E/e (User requirement)
+        if (word.toLowerCase().includes('e')) return word;
+        
+        // Skip short symbols or short words
         if (word.length <= 1) return word;
 
-        // Permintaan User: Jika ada huruf E atau e, lewati penulisan unik (biarkan normal asli)
-        if (word.toLowerCase().includes('e')) return word;
-
-        // Hanya inject ke kata yang terlihat normal (tanpa hyphens)
-        // Jika sudah ada hyphens dari AI (Bocil Mode aktif), kita biarkan hyphens tersebut
-        if (word.includes('-')) return word;
+        // If it's already a phonetic split from AI (contains hyphens), 
+        // we just add invisible chars to be extra safe
+        if (word.includes('-')) {
+          return word.split('').join(ZWNJ);
+        }
         
-        // Inject ZWNJ di antara karakter untuk stealth
-        return word.split('').join('\u200C');
+        // "Unique" styling: 
+        // 1. Alternating invisible chars
+        // 2. Subtle phonetic shift (only if simple) - but better to do this in AI prompt
+        // Here we just focus on the invisible injection for "Tulisan Unik"
+        let unique = '';
+        for (let i = 0; i < word.length; i++) {
+          unique += word[i] + (i % 2 === 0 ? ZWNJ : ZWS);
+        }
+        return unique;
       }).join(' ');
     }).join('\n');
   };
@@ -415,11 +427,11 @@ export default function App() {
       5. Pastikan output terlihat rapi dan profesional untuk langsung di-copy ke Suno/Udio.
 
       ${isBocilMode ? `ATURAN BOCIL MODE (STEALTH COPYRIGHT):
-      - TUJUAN: Menghindari deteksi hak cipta Suno/Udio/Yolly AI tanpa merusak makna.
-      - PENGECUALIAN HURUF 'E': **WAJIB** Jika kata mengandung huruf 'E' atau 'e' (misal: mereka, berubah, selesai, pernah, rela, kecewa, dll), **DILARANG** melakukan pemenggalan fonetik atau penulisan unik. Tulis kata tersebut 100% normal.
-      - TULISAN NORMAL 'BOCIL': Kata "bocil" tetap ditulis normal "bocil" (kecuali jika mengandung 'e' maka otomatis normal).
-      - KATA LAIN: Gunakan pemenggalan fonetik cerdas (misal: "Se- li- puwt", "Me- nyay- aw- ngi") pada kata-kata yang berisiko hak cipta, KECUALI yang mengandung huruf 'e'.
-      - Gunakan pola perpanjangan vokal halus ('uw', 'iy', 'aw') untuk membantu pelafalan alami.` : ''}
+      - TUJUAN: Menciptakan "Tulisan Unik" yang lolos filter hak cipta Suno/Yolly AI.
+      - PENGECUALIAN HURUF 'E': **WAJIB** Jika kata mengandung huruf 'E' atau 'e' (misal: mereka, rela, kecewa, dll), Tulis kata tersebut 100% normal tanpa perubahan apapun.
+      - TULISAN UNIK (ANTI-Copyright): Untuk kata TANPA huruf 'e', gunakan pemenggalan suku kata kreatif/fonetik (misal: "Mem- puw- nyai", "Cay- an- gkuw", "Lu- ka- kuw"). 
+      - Gunakan variasi huruf vokal berlebih ('ay', 'uw', 'iy') pada akhir suku kata untuk memutus pengenalan teks otomatis oleh AI Musik.
+      - Pastikan "bocil" ditulis normal "bocil" (Post-processor akan mengamankannya secara siluman).` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Ganti kata dengan sinonim jika user mengizinkan optimasi lirik untuk rima yang lebih baik agar terhindar dari deteksi plagiarisme lirik.` : `ATURAN LIRIK (ORIGINAL - STRICT):
