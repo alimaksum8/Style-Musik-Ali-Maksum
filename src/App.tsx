@@ -33,7 +33,7 @@ const OPTIONS = {
     "Bossa Nova", "Swing", "Blues", "Folk", "Bluegrass", "Country", "Americana", "Klasik", "Orkestra", "Chamber", 
     "EDM", "Techno", "House", "Deep House", "Dubstep", "Future Bass", "Phonk", "K-Pop", "J-Pop", "J-Rock", "Gaya Anime", 
     "Gospel", "New Age", "Ambient", "Industrial", "Disco", "Funk", "Afrobeats", "Latin", "Salsa", "Flamenco",
-    "TikTok Viral", "Lo-fi Aesthetic", "Orchestral TikTok", "Pop Timur", "Hibrida Eksperimental", "Hyperpop"
+    "Spotify Viral", "TikTok Viral", "Lo-fi Aesthetic", "Orchestral TikTok", "Pop Timur", "Hibrida Eksperimental", "Hyperpop", "Cinematic EDM"
   ],
   intros: [
     "Biola", "Grand Piano", "Saksofon", "Gitar Distorsi", "Gitar Elektrik", "Perkusi Akustik", "Solo Gitar Sustain", "Solo Gitar Bending", "Solo Gitar Vibrato", "Solo Nada Tinggi / Gitar Menjerit", "Solo Gitar Lead",
@@ -62,13 +62,13 @@ const OPTIONS = {
     "Santai", "Menyeramkan", "Nostalgia", "Penuh Harapan", "Marah", "Tenang", "Misterius", "Ethereal", "Trippy", "Sedih",
     "Aneh", "Lounge", "Megah", "Intens", "Peaceful", "Seksi", "Heroik", "Gotik", "Ceria", "Cemas",
     "Psikedelik", "Minimalis", "Sensual", "Canggih", "Happy", "Romantic", "Dreamy", "Energetic",
-    "Epic", "Sad", "Tense", "Heroik", "Epic / Dramatic Instrumental", "Modern Classical", "Timur Hybrid"
+    "Epic", "Sad", "Tense", "Epic / Dramatic Instrumental", "Modern Classical", "Timur Hybrid", "Atmospheric"
   ],
   emotions: [
     "Appassionato (Penuh Gairah)", "Dolce (Manis & Lembut)", "Lacrimoso (Penuh Air Mata)", "Con Fuoco (Berapi-api)",
     "Cantabile (Seperti Menyanyi)", "Maestoso (Agung/Mulia)", "Espressivo (Ekspresif)", "Agitato (Gelisah/Cepat)",
     "Sotto Voce (Berbisik)", "Grave (Serius & Berat)", "Leggiero (Ringan & Halus)", "Doloroso (Pedih/Sedih)",
-    "Furioso (Sangat Marah)", "Amoroso (Penuh Kasih)", "Misterioso (Misterius)", "Manja", "Emotional", "Powerful", "Whisper vocals", "Aggressive",
+    "Furioso (Sangat Marah)", "Amoroso (Penuh Kasih)", "Misterioso (Misterius)", "Manja",
     "Soft", "Smooth", "Expressive", "Dark", "Breathy", "Vocal Fry", "Whistle Register"
   ],
   vocals: [
@@ -144,6 +144,17 @@ const PRESETS: Record<string, any> = {
     intros: ["Bass drop", "Synth swell", "Drum fill"],
     instruments: ["808 Bass", "Synthesizer", "Drum Machine"],
     productionRules: "STRICT TIKTOK GEN Z VIRAL AESTHETIC: Hyperpop & Dance Pop & Hip Hop & House remixed for TikTok trends. Mood: Energetic Happy Aggressive. Expression: Powerful Emotional Aggressive Expressive Espressivo Staccato. Effects: Reverb Distortion Chorus. Vocals: Female Solo Scream. Tempo: 80-100 BPM 120-140 BPM. Intro: Bass drop Synth swell Drum fill. Production Rules: Heavy 808s, crisp high-end, catchy earworm hooks, 15-60s viral segment focus, modern Gen Z sound design, high quality, trending TikTok audio texture."
+  },
+  "Gen Z 7 (Slow Rilex)": {
+    genres: ["EDM", "Trap", "Future Bass", "Cinematic EDM"],
+    moods: ["Atmospheric", "Trippy", "Intens", "Sinematik", "Energetic"],
+    emotions: ["Soft", "Whisper vocals", "Powerful", "Aggressive"],
+    effects: ["Reverb", "Echo", "Vinyl crackle", "Glitch"],
+    vocals: ["Female", "Glitch Vocals"],
+    tempos: ["40-60 BPM", "80-100 BPM"],
+    intros: ["Lo-fi vinyl crackle", "Glitchy vocal chop"],
+    instruments: ["808 Bass", "Klarinet", "Bassoon", "Terompet", "Tuba"],
+    productionRules: "STRICT TIKTOK GEN Z VIRAL AESTHETIC: High-energy cinematic EDM, Trap fusion, future bass with heavy 808 bass, glitchy vocal chops, and orchestral undertones including clarinet, bassoon, and brass sections. Atmospheric, trippy, and intense mood. Dynamic shifts between soft, whispery female vocals and powerful, aggressive drops. Tempo varies between 55 BPM for melodic sections and 95 BPM for high-energy segments, featuring a lo-fi vinyl crackle texture and heavy reverb/echo effects. Heavy 808s, crisp high-end, catchy earworm hooks, 15-60s viral segment focus, modern Gen Z sound design, high quality, trending TikTok audio texture."
   }
 };
 
@@ -175,6 +186,7 @@ export default function App() {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modifyLyrics, setModifyLyrics] = useState(true);
   const [isBocilMode, setIsBocilMode] = useState(false);
+  const [isAntiEMode, setIsAntiEMode] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("4 Menit");
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [showPresets, setShowPresets] = useState(false);
@@ -231,8 +243,8 @@ export default function App() {
     setLoadingYoutube(true);
     try {
       const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
-        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio.");
+      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || String(apiKey) === "undefined" || apiKey === "") {
+        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio (ikon kunci di menu samping).");
       }
       const ai = new GoogleGenAI({ apiKey });
       
@@ -342,8 +354,8 @@ export default function App() {
       // Logika pengambilan API Key yang lebih kuat
       let apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 
-      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
-        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio.");
+      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || String(apiKey) === "undefined" || apiKey === "") {
+        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio (ikon kunci di menu samping).");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -380,6 +392,12 @@ export default function App() {
       4. JANGAN memotong baris di tengah kalimat secara acak.
       5. Pastikan output terlihat rapi dan profesional untuk langsung di-copy ke Suno/Udio.
 
+      ${isAntiEMode ? `ATURAN ANTI-E (LIPOGRAM):
+      - **DILARANG KERAS** menuliskan atau menggunakan kata yang mengandung huruf 'E' atau 'e' (baik huruf besar maupun kecil).
+      - Contoh kata yang DILARANG: mereka, berubah, selesai, pernah, rela, kecewa, ke, di (kecuali 'di' tidak ada E), dll.
+      - Jika lirik input mengandung huruf 'E', Anda WAJIB mengubahnya menjadi sinonim yang tanpa huruf 'E' atau MENGHAPUS kata tersebut jika tidak ada alternatifnya.
+      - Hasil akhir lirik HARUS 100% bebas dari huruf 'E'.` : ''}
+
       ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STEALTH):
       - TUJUAN: Menghindari deteksi hak cipta (Copyright Detection) TANPA mengubah kata asli.
       - CARA KERJA: Sistem deteksi Suno/Udio mencari kecocokan string teks utuh. Dengan memecah kata menjadi suku kata fonetik (misal: "Mem- puw- nyai"), kita memutus pola deteksi teks otomatis namun AI musik tetap melafalkannya secara akurat.
@@ -389,8 +407,8 @@ export default function App() {
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Ganti kata dengan sinonim jika user mengizinkan optimasi lirik untuk rima yang lebih baik.` : `ATURAN LIRIK (ORIGINAL - STRICT):
-      - **DILARANG KERAS** mengubah kata asli atau lirik asli (kecuali pemenggalan fonetik jika Bocil Mode aktif).
-      - Pertahankan setiap kata sesuai input user secara 100%. pemenuhan anti-copyright dilakukan murni melalui teknik pemenggalan fonetik Bocil Mode.`}`;
+      - **DILARANG KERAS** mengubah kata asli atau lirik asli (kecuali pemenggalan fonetik atau aturan lipogram aktif).
+      - Pertahankan setiap kata sesuai input user secara 100%, terkecuali jika ATURAN ANTI-E aktif maka prioritas adalah membuang huruf 'E'.`}`;
 
       const userPrompt = `Lirik: "${lyrics}". 
       Genre: ${selectedOptions.genres.join(', ')}. 
@@ -631,6 +649,17 @@ export default function App() {
                   </div>
 
                   <div className="flex items-center gap-1 bg-black/40 p-1.5 rounded-2xl border border-white/5">
+                  <button
+                    onClick={() => setIsAntiEMode(!isAntiEMode)}
+                    className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
+                      isAntiEMode 
+                        ? "bg-rose-600 text-white shadow-lg shadow-rose-600/20 ring-2 ring-white/20" 
+                        : "text-slate-500 hover:text-slate-300"
+                    }`}
+                    title="Tantangan Tanpa Huruf E: Hapus/Ganti kata dengan huruf E"
+                  >
+                    TANPA-E {isAntiEMode ? 'ON' : 'OFF'}
+                  </button>
                   <button
                     onClick={() => setIsBocilMode(!isBocilMode)}
                     className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
