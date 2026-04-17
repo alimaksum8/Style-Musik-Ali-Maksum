@@ -62,13 +62,13 @@ const OPTIONS = {
     "Santai", "Menyeramkan", "Nostalgia", "Penuh Harapan", "Marah", "Tenang", "Misterius", "Ethereal", "Trippy", "Sedih",
     "Aneh", "Lounge", "Megah", "Intens", "Peaceful", "Seksi", "Heroik", "Gotik", "Ceria", "Cemas",
     "Psikedelik", "Minimalis", "Sensual", "Canggih", "Happy", "Romantic", "Dreamy", "Energetic",
-    "Epic", "Sad", "Tense", "Epic / Dramatic Instrumental", "Modern Classical", "Timur Hybrid", "Atmospheric"
+    "Epic", "Sad", "Tense", "Heroik", "Epic / Dramatic Instrumental", "Modern Classical", "Timur Hybrid", "Atmospheric"
   ],
   emotions: [
     "Appassionato (Penuh Gairah)", "Dolce (Manis & Lembut)", "Lacrimoso (Penuh Air Mata)", "Con Fuoco (Berapi-api)",
     "Cantabile (Seperti Menyanyi)", "Maestoso (Agung/Mulia)", "Espressivo (Ekspresif)", "Agitato (Gelisah/Cepat)",
     "Sotto Voce (Berbisik)", "Grave (Serius & Berat)", "Leggiero (Ringan & Halus)", "Doloroso (Pedih/Sedih)",
-    "Furioso (Sangat Marah)", "Amoroso (Penuh Kasih)", "Misterioso (Misterius)", "Manja",
+    "Furioso (Sangat Marah)", "Amoroso (Penuh Kasih)", "Misterioso (Misterius)", "Manja", "Emotional", "Powerful", "Whisper vocals", "Aggressive",
     "Soft", "Smooth", "Expressive", "Dark", "Breathy", "Vocal Fry", "Whistle Register"
   ],
   vocals: [
@@ -186,7 +186,6 @@ export default function App() {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [modifyLyrics, setModifyLyrics] = useState(true);
   const [isBocilMode, setIsBocilMode] = useState(false);
-  const [isAntiEMode, setIsAntiEMode] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("4 Menit");
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [showPresets, setShowPresets] = useState(false);
@@ -205,6 +204,25 @@ export default function App() {
   const [result, setResult] = useState<GeneratedResult | null>(null);
   const [history, setHistory] = useState<GeneratedResult[]>([]);
   const [copyStatus, setCopyStatus] = useState<Record<string, boolean>>({});
+
+  const injectStealth = (text: string) => {
+    // Menyisipkan ZWNJ (Zero Width Non-Joiner) agar tulisan terlihat 100% normal
+    // namun secara data teks berbeda, sehingga lolos filter Suno/Udio/Yolly.
+    return text.split('\n').map(line => {
+      // Lewati baris yang merupakan [Tag] musik
+      if (line.trim().startsWith('[') && line.trim().endsWith(']')) return line;
+      
+      return line.split(' ').map(word => {
+        if (word.length <= 1) return word;
+        // Hanya inject ke kata yang terlihat normal (tanpa hyphens)
+        // Jika sudah ada hyphens dari AI (Bocil Mode aktif), kita biarkan hyphens tersebut
+        if (word.includes('-')) return word;
+        
+        // Inject ZWNJ di antara karakter untuk stealth
+        return word.split('').join('\u200C');
+      }).join(' ');
+    }).join('\n');
+  };
 
   // Load history from localStorage
   useEffect(() => {
@@ -243,8 +261,8 @@ export default function App() {
     setLoadingYoutube(true);
     try {
       const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || String(apiKey) === "undefined" || apiKey === "") {
-        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio (ikon kunci di menu samping).");
+      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
+        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio.");
       }
       const ai = new GoogleGenAI({ apiKey });
       
@@ -354,8 +372,8 @@ export default function App() {
       // Logika pengambilan API Key yang lebih kuat
       let apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 
-      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || String(apiKey) === "undefined" || apiKey === "") {
-        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio (ikon kunci di menu samping).");
+      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
+        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio.");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -392,23 +410,16 @@ export default function App() {
       4. JANGAN memotong baris di tengah kalimat secara acak.
       5. Pastikan output terlihat rapi dan profesional untuk langsung di-copy ke Suno/Udio.
 
-      ${isAntiEMode ? `ATURAN ANTI-E (LIPOGRAM):
-      - **DILARANG KERAS** menuliskan atau menggunakan kata yang mengandung huruf 'E' atau 'e' (baik huruf besar maupun kecil).
-      - Contoh kata yang DILARANG: mereka, berubah, selesai, pernah, rela, kecewa, ke, di (kecuali 'di' tidak ada E), dll.
-      - Jika lirik input mengandung huruf 'E', Anda WAJIB mengubahnya menjadi sinonim yang tanpa huruf 'E' atau MENGHAPUS kata tersebut jika tidak ada alternatifnya.
-      - Hasil akhir lirik HARUS 100% bebas dari huruf 'E'.` : ''}
-
-      ${isBocilMode ? `ATURAN BOCIL MODE (PHONETIC STEALTH):
-      - TUJUAN: Menghindari deteksi hak cipta (Copyright Detection) TANPA mengubah kata asli.
-      - CARA KERJA: Sistem deteksi Suno/Udio mencari kecocokan string teks utuh. Dengan memecah kata menjadi suku kata fonetik (misal: "Mem- puw- nyai"), kita memutus pola deteksi teks otomatis namun AI musik tetap melafalkannya secara akurat.
-      - WAJIB memecah setiap kata menjadi suku kata yang dipisahkan tanda hubung (-).
-      - Gunakan pola perpanjangan vokal ('uw', 'iy', 'aw') untuk membantu pelafalan alami.
-      - Meskipun dalam gaya fonetik, lirik harus tetap merepresentasikan kata aslinya secara bunyi.` : ''}
+      ${isBocilMode ? `ATURAN BOCIL MODE (STEALTH COPYRIGHT):
+      - TUJUAN: Menghindari deteksi hak cipta Suno/Udio/Yolly AI tanpa merusak makna.
+      - TULISAN NORMAL 'BOCIL': Kata "bocil" HARUS tetap ditulis normal "bocil" (tanpa pemenggalan) agar tetap terbaca jelas, namun gunakan teknik 'Invisible Stealth' (menyisipkan Zero-Width Space di antara huruf jika memungkinkan) atau optimasi konteks untuk melindunginya.
+      - KATA LAIN: Gunakan pemenggalan fonetik cerdas (misal: "Se- li- puwt", "Me- nyay- aw- ngi") pada kata-kata yang berisiko hak cipta atau kata-kata populer.
+      - Gunakan pola perpanjangan vokal halus ('uw', 'iy', 'aw') untuk membantu pelafalan alami di AI Musik.` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
-      - Ganti kata dengan sinonim jika user mengizinkan optimasi lirik untuk rima yang lebih baik.` : `ATURAN LIRIK (ORIGINAL - STRICT):
-      - **DILARANG KERAS** mengubah kata asli atau lirik asli (kecuali pemenggalan fonetik atau aturan lipogram aktif).
-      - Pertahankan setiap kata sesuai input user secara 100%, terkecuali jika ATURAN ANTI-E aktif maka prioritas adalah membuang huruf 'E'.`}`;
+      - Ganti kata dengan sinonim jika user mengizinkan optimasi lirik untuk rima yang lebih baik agar terhindar dari deteksi plagiarisme lirik.` : `ATURAN LIRIK (ORIGINAL - STRICT):
+      - **DILARANG KERAS** mengubah kata asli atau lirik asli (kecuali pemenggalan fonetik jika Bocil Mode aktif).
+      - Pertahankan setiap kata sesuai input user secara 100%. pemenuhan anti-copyright dilakukan murni melalui teknik fonetik stealth.`}`;
 
       const userPrompt = `Lirik: "${lyrics}". 
       Genre: ${selectedOptions.genres.join(', ')}. 
@@ -483,8 +494,16 @@ export default function App() {
       }
 
       const data = JSON.parse(response.text) as GeneratedResult;
+      
+      // Post-process for Stealth Check
+      let finalLyrics = data.formattedLyrics;
+      if (isBocilMode) {
+        finalLyrics = injectStealth(finalLyrics);
+      }
+
       const resultWithTime = { 
         ...data, 
+        formattedLyrics: finalLyrics,
         timestamp: Date.now(),
         originalLyrics: lyrics,
         options: { ...selectedOptions }
@@ -649,17 +668,6 @@ export default function App() {
                   </div>
 
                   <div className="flex items-center gap-1 bg-black/40 p-1.5 rounded-2xl border border-white/5">
-                  <button
-                    onClick={() => setIsAntiEMode(!isAntiEMode)}
-                    className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
-                      isAntiEMode 
-                        ? "bg-rose-600 text-white shadow-lg shadow-rose-600/20 ring-2 ring-white/20" 
-                        : "text-slate-500 hover:text-slate-300"
-                    }`}
-                    title="Tantangan Tanpa Huruf E: Hapus/Ganti kata dengan huruf E"
-                  >
-                    TANPA-E {isAntiEMode ? 'ON' : 'OFF'}
-                  </button>
                   <button
                     onClick={() => setIsBocilMode(!isBocilMode)}
                     className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
