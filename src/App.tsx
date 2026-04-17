@@ -214,6 +214,10 @@ export default function App() {
       
       return line.split(' ').map(word => {
         if (word.length <= 1) return word;
+
+        // Permintaan User: Jika ada huruf E atau e, lewati penulisan unik (biarkan normal asli)
+        if (word.toLowerCase().includes('e')) return word;
+
         // Hanya inject ke kata yang terlihat normal (tanpa hyphens)
         // Jika sudah ada hyphens dari AI (Bocil Mode aktif), kita biarkan hyphens tersebut
         if (word.includes('-')) return word;
@@ -412,9 +416,10 @@ export default function App() {
 
       ${isBocilMode ? `ATURAN BOCIL MODE (STEALTH COPYRIGHT):
       - TUJUAN: Menghindari deteksi hak cipta Suno/Udio/Yolly AI tanpa merusak makna.
-      - TULISAN NORMAL 'BOCIL': Kata "bocil" HARUS tetap ditulis normal "bocil" (tanpa pemenggalan) agar tetap terbaca jelas, namun gunakan teknik 'Invisible Stealth' (menyisipkan Zero-Width Space di antara huruf jika memungkinkan) atau optimasi konteks untuk melindunginya.
-      - KATA LAIN: Gunakan pemenggalan fonetik cerdas (misal: "Se- li- puwt", "Me- nyay- aw- ngi") pada kata-kata yang berisiko hak cipta atau kata-kata populer.
-      - Gunakan pola perpanjangan vokal halus ('uw', 'iy', 'aw') untuk membantu pelafalan alami di AI Musik.` : ''}
+      - PENGECUALIAN HURUF 'E': **WAJIB** Jika kata mengandung huruf 'E' atau 'e' (misal: mereka, berubah, selesai, pernah, rela, kecewa, dll), **DILARANG** melakukan pemenggalan fonetik atau penulisan unik. Tulis kata tersebut 100% normal.
+      - TULISAN NORMAL 'BOCIL': Kata "bocil" tetap ditulis normal "bocil" (kecuali jika mengandung 'e' maka otomatis normal).
+      - KATA LAIN: Gunakan pemenggalan fonetik cerdas (misal: "Se- li- puwt", "Me- nyay- aw- ngi") pada kata-kata yang berisiko hak cipta, KECUALI yang mengandung huruf 'e'.
+      - Gunakan pola perpanjangan vokal halus ('uw', 'iy', 'aw') untuk membantu pelafalan alami.` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Ganti kata dengan sinonim jika user mengizinkan optimasi lirik untuk rima yang lebih baik agar terhindar dari deteksi plagiarisme lirik.` : `ATURAN LIRIK (ORIGINAL - STRICT):
