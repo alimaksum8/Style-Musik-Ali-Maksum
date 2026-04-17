@@ -428,10 +428,13 @@ export default function App() {
 
       ${isBocilMode ? `ATURAN BOCIL MODE (STEALTH COPYRIGHT):
       - TUJUAN: Menciptakan "Tulisan Unik" yang lolos filter hak cipta Suno/Yolly AI.
-      - PENGECUALIAN HURUF 'E': **WAJIB** Jika kata mengandung huruf 'E' atau 'e' (misal: mereka, rela, kecewa, dll), Tulis kata tersebut 100% normal tanpa perubahan apapun.
-      - TULISAN UNIK (ANTI-Copyright): Untuk kata TANPA huruf 'e', gunakan pemenggalan suku kata kreatif/fonetik (misal: "Mem- puw- nyai", "Cay- an- gkuw", "Lu- ka- kuw"). 
-      - Gunakan variasi huruf vokal berlebih ('ay', 'uw', 'iy') pada akhir suku kata untuk memutus pengenalan teks otomatis oleh AI Musik.
-      - Pastikan "bocil" ditulis normal "bocil" (Post-processor akan mengamankannya secara siluman).` : ''}
+      - PENGECUALIAN HURUF 'E': **WAJIB** Jika kata mengandung huruf 'E' atau 'e', tulis kata tersebut 100% normal tanpa perubahan apapun.
+      - TULISAN UNIK (HATI-HATI FONETIK): Gunakan pemenggalan suku kata yang akurat secara bunyi.
+      - **DILARANG KERAS** menyisipkan 'w' setelah huruf 'a' (misal: "cinta" JANGAN ditulis "cin- taw").
+      - **ATURAN HURUF 'I'**: Boleh diikuti 'y' untuk keunikan (misal: "cinta" -> "ciyn- ta", "hati" -> "ha- tiy").
+      - **ATURAN HURUF 'A'**: Biarkan 'a' tetap 'a' (jangan diikuti 'w').
+      - **POLA BENAR**: Fokus pada pemisahan suku kata dan penambahan 'y' pada 'i' atau 'w' pada 'u'. Contoh: "sakit" -> "sa- kiy- t", "luka" -> "luw- ka".
+      - Pastikan "bocil" ditulis normal "bocil".` : ''}
 
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK (OPTIMASI):
       - Ganti kata dengan sinonim jika user mengizinkan optimasi lirik untuk rima yang lebih baik agar terhindar dari deteksi plagiarisme lirik.` : `ATURAN LIRIK (ORIGINAL - STRICT):
