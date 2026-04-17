@@ -32,14 +32,20 @@ const OPTIONS = {
     "Punk", "Pop Punk", "Synthwave", "Retrowave", "Lo-fi Hip Hop", "Trap", "Rap Klasik", "R&B", "Soul", "Neo-soul", "Jazz", 
     "Bossa Nova", "Swing", "Blues", "Folk", "Bluegrass", "Country", "Americana", "Klasik", "Orkestra", "Chamber", 
     "EDM", "Techno", "House", "Deep House", "Dubstep", "Future Bass", "Phonk", "K-Pop", "J-Pop", "J-Rock", "Gaya Anime", 
-    "Gospel", "New Age", "Ambient", "Industrial", "Disco", "Funk", "Afrobeats", "Latin", "Salsa", "Flamenco"
+    "Gospel", "New Age", "Ambient", "Industrial", "Disco", "Funk", "Afrobeats", "Latin", "Salsa", "Flamenco",
+    "TikTok Viral", "Lo-fi Aesthetic", "Orchestral TikTok", "Pop Timur", "Hibrida Eksperimental", "Hyperpop"
   ],
   intros: [
     "Biola", "Grand Piano", "Saksofon", "Gitar Distorsi", "Gitar Elektrik", "Perkusi Akustik", "Solo Gitar Sustain", "Solo Gitar Bending", "Solo Gitar Vibrato", "Solo Nada Tinggi / Gitar Menjerit", "Solo Gitar Lead",
     "Intro Tematik Main Theme Preview With Solo Gitar Sustain",
     "Intro Tematik Chorus Preview With Solo Gitar Sustain",
     "Intro Tematik Main Theme Preview With Solo Biola",
-    "Intro Tematik Chorus Preview With Solo Biola"
+    "Intro Tematik Chorus Preview With Solo Biola",
+    "Viral TikTok intro", "Sped-up chipmunk vocal", "Retro synthwave arpeggio",
+    "Slow piano", "Drum fill", "Bass drop", "Vocal chop",
+    "Beat drop", "Glitchy vocal chop", "Lo-fi vinyl crackle", "Bass-boosted riser",
+    "Ambient rain intro", "Celtic guitar interlude", "Cinematic strings intro",
+    "Synth swell"
   ],
   instruments: [
     "Gitar Akustik", "Gitar Elektrik", "Gitar Distorsi", "Gitar Muted", "Gitar Slide", "Gitar 12-Senar", "Gitar Nilon",
@@ -49,27 +55,96 @@ const OPTIONS = {
     "Terompet", "Saksofon", "Trombon", "Tuba", "French Horn", "Seruling", "Klarinet", "Oboe", "Bassoon", "Harmonika", "Bagpipes",
     "Drum", "808 Bass", "TR-909", "Drum Machine", "Perkusi Akustik", "Perkusi Sinematik", "Timpani", "Xilofon", "Marimba",
     "Congas", "Bongos", "Tamborin", "Shaker", "Cowbell",
-    "Gamelan", "Kendang", "Suling", "Angklung", "Koto", "Shamisen", "Erhu", "Tabla", "Djembe", "Didgeridoo"
+    "Gamelan", "Kendang", "Suling", "Angklung", "Koto", "Shamisen", "Erhu", "Tabla", "Djembe", "Didgeridoo", "Celtic Instruments"
   ],
   moods: [
     "Epik", "Melankolis", "Membangkitkan Semangat", "Agresif", "Bermimpi", "Gelap", "Enerjik", "Sinematik", "Romantis", 
     "Santai", "Menyeramkan", "Nostalgia", "Penuh Harapan", "Marah", "Tenang", "Misterius", "Ethereal", "Trippy", "Sedih",
     "Aneh", "Lounge", "Megah", "Intens", "Peaceful", "Seksi", "Heroik", "Gotik", "Ceria", "Cemas",
-    "Psikedelik", "Minimalis", "Sensual", "Canggih"
+    "Psikedelik", "Minimalis", "Sensual", "Canggih", "Happy", "Romantic", "Dreamy", "Energetic",
+    "Epic", "Sad", "Tense", "Heroik", "Epic / Dramatic Instrumental", "Modern Classical", "Timur Hybrid"
   ],
   emotions: [
     "Appassionato (Penuh Gairah)", "Dolce (Manis & Lembut)", "Lacrimoso (Penuh Air Mata)", "Con Fuoco (Berapi-api)",
     "Cantabile (Seperti Menyanyi)", "Maestoso (Agung/Mulia)", "Espressivo (Ekspresif)", "Agitato (Gelisah/Cepat)",
     "Sotto Voce (Berbisik)", "Grave (Serius & Berat)", "Leggiero (Ringan & Halus)", "Doloroso (Pedih/Sedih)",
-    "Furioso (Sangat Marah)", "Amoroso (Penuh Kasih)", "Misterioso (Misterius)"
+    "Furioso (Sangat Marah)", "Amoroso (Penuh Kasih)", "Misterioso (Misterius)", "Manja", "Emotional", "Powerful", "Whisper vocals", "Aggressive",
+    "Soft", "Smooth", "Expressive", "Dark", "Breathy", "Vocal Fry", "Whistle Register"
   ],
   vocals: [
     "Pria", "Wanita", "Serak", "Opera", "Paduan Suara", "Berbisik", "Soulful", "Duo", "Nada Tinggi", "Berteriak", 
     "Bass Dalam", "Auto-tune", "Vocaloid", "Rap", "Growl", "Bernapas", "Harmonisasi", "Furry", "Suara Anak-anak",
     "Falsetto", "Vibrato", "Monoton", "Kata-kata Lisan", "Scat Singing", "Yodeling", "Belting", "Head Voice", "Chest Voice",
-    "Vokal Sopran", "Vokal Seriosa", "Vokal Orkestra", "Vokal Dangdut", "Vokal Slowrock Malaysia", "Chanting"
+    "Vokal Sopran", "Vokal Seriosa", "Vokal Orkestra", "Vokal Dasar", "Vokal Dangdut", "Vokal Slowrock Malaysia", "Chanting", "Female", "Male", "Robotic", "Menyanyi", "Scream", "Melodic", "Glitch Vocals", "Helium Vocals", "Lembut", "Duo Pria-Wanita", "Solo"
   ],
-  tempos: ["40-60 BPM", "60-80 BPM", "80-100 BPM", "100-120 BPM", "Cepat (140+ BPM)", "Sangat Cepat (180+ BPM)"]
+  tempos: ["40-60 BPM", "60-80 BPM", "80-100 BPM", "100-120 BPM", "120-140 BPM", "Cepat (140+ BPM)", "Sangat Cepat (180+ BPM)", "Staccato (Terputus-putus)", "Rubato (Tempo Ekspresif)", "Accelerando (Semakin Cepat)"],
+  effects: ["Reverb", "Chorus", "Autotune", "Delay", "Echo", "Vinyl crackle", "Glitch", "FX", "Distortion"]
+};
+
+const PRESETS: Record<string, any> = {
+  "Gen Z1 (Sedang)": {
+    genres: ["Dangdut", "Dubstep", "Future Bass", "Synthwave", "TikTok Viral"],
+    moods: ["Happy", "Santai", "Romantic", "Dreamy", "Energetic", "Agresif", "Sinematik", "Heroik"],
+    emotions: ["Manja", "Emotional", "Powerful", "Whisper vocals", "Aggressive", "Appassionato (Penuh Gairah)", "Dolce (Manis & Lembut)", "Con Fuoco (Berapi-api)", "Espressivo (Ekspresif)", "Maestoso (Agung/Mulia)", "Grave (Serius & Berat)", "Amoroso (Penuh Kasih)"],
+    vocals: ["Wanita", "Auto-tune", "Paduan Suara", "Robotic", "Menyanyi"],
+    tempos: ["40-60 BPM", "80-100 BPM", "Staccato (Terputus-putus)", "Rubato (Tempo Ekspresif)"],
+    intros: ["Viral TikTok intro", "Sped-up chipmunk vocal", "Retro synthwave arpeggio"],
+    instruments: ["808 Bass", "Synthesizer"],
+    productionRules: "STRICT TIKTOK GEN Z VIRAL AESTHETIC: Dangdut & Lo-fi & Dubstep & 808 Bass & Future Bass & Synthesizer & Subito/Surprise & Bass Hits remixed for TikTok trends. Mood: Happy Santai Romantic Dreamy Energetic Agresif Sinematik Heroik. Expression: Manja Emotional Powerful Whisper Aggressive Appassionato Penuh Gairah Dolce Manis & Lembut Con Fuoco Berapi-api Espressivo Ekspresif Maestoso Agung/Mulia Grave Serius & Berat Amoroso Penuh Kasih. Vocals: Female Auto-tune Choir Robotic Menyanyi. Tempo: 40-60 BPM 80-100 BPM Staccato Terputus-putus Rubato Tempo Ekspresif. Intro: Viral TikTok intro Sped-up chipmunk vocal Retro synthwave arpeggio. Production Rules: Heavy 808s, crisp high-end, catchy earworm hooks, 15-60s viral segment focus, modern Gen Z sound design, high quality, trending TikTok audio texture."
+  },
+  "Gen Z 2 (Slow Nendang)": {
+    genres: ["Orchestral TikTok"],
+    moods: ["Epic", "Sad", "Melankolis", "Intens", "Romantis", "Energetic", "Aggressive"],
+    emotions: ["Emotional", "Powerful", "Staccato (Terputus-putus)", "Soft", "Smooth", "Expressive", "Dark", "Espressivo (Ekspresif)"],
+    effects: ["Reverb", "Chorus", "Autotune", "Delay", "Echo", "Vinyl crackle"],
+    vocals: ["Paduan Suara", "Instrumental", "Female", "Male", "Scream", "Melodic"],
+    tempos: ["80-100 BPM", "120-140 BPM"],
+    intros: ["Slow piano", "Drum fill", "Bass drop", "Vocal chop"],
+    instruments: ["808 Bass", "Grand Piano", "Biola", "Drum Machine"],
+    productionRules: "STRICT TIKTOK GEN Z VIRAL AESTHETIC: Orchestral remixed for TikTok trends. Mood: Epic Sad Melancholic Tense Romantic Energetic Aggressive. Expression: Emotional Powerful Staccato Soft Smooth Expressive Dark Espressivo. Effects: Reverb Chorus Autotune Delay Echo Vinyl crackle. Vocals: Choir Instrumental Female Male Scream Melodic. Tempo: 80-100 BPM 120-140 BPM. Intro: Slow piano Drum fill Bass drop Vocal chop. Production Rules: Heavy 808s, crisp high-end, catchy earworm hooks, 15-60s viral segment focus, modern Gen Z sound design, high quality, trending TikTok audio texture."
+  },
+  "Gen Z 3 (Slow Asyik)": {
+    genres: ["EDM", "Trap", "TikTok Viral"],
+    moods: ["Energetic", "Trippy", "Intens", "Sad", "Romantis", "Sinematik", "Megah"],
+    emotions: ["Agitato (Gelisah/Cepat)", "Emotional", "Powerful", "Soft", "Aggressive", "Whisper vocals", "Doloroso (Pedih/Sedih)", "Dolce (Manis & Lembut)"],
+    vocals: ["Auto-tune", "Female", "Robotic"],
+    tempos: ["40-60 BPM", "80-100 BPM", "Rubato (Tempo Ekspresif)"],
+    intros: ["Beat drop", "Viral TikTok intro", "Glitchy vocal chop", "Lo-fi vinyl crackle", "Bass-boosted riser"],
+    instruments: ["808 Bass", "Synthesizer", "Drum Machine"],
+    productionRules: "STRICT TIKTOK GEN Z VIRAL AESTHETIC: EDM & Trap & 808 Bass remixed for TikTok trends. Mood: Energetic Trippy Intens Sad Romantic Sinematik Megah. Expression: Agitato Gelisah/Cepat Emotional Powerful Soft Aggressive Whisper Doloroso Pedih/Sedih Dolce Manis & Lembut. Vocals: Auto-tune Female Robotic. Tempo: 40-60 BPM 80-100 BPM Rubato Tempo Ekspresif. Intro: Beat drop Viral TikTok intro Glitchy vocal chop Lo-fi vinyl crackle Bass-boosted riser. Production Rules: Heavy 808s, crisp high-end, catchy earworm hooks, 15-60s viral segment focus, modern Gen Z sound design, high quality, trending TikTok audio texture."
+  },
+  "Gen Z 4 (Slow Werwer)": {
+    genres: ["Orkestra", "Dubstep", "Rock", "Heavy Metal"],
+    moods: ["Heroik", "Sinematik", "Megah", "Sad", "Romantis", "Epik", "Dreamy", "Agresif", "Epic / Dramatic Instrumental", "Modern Classical"],
+    emotions: ["Maestoso (Agung/Mulia)", "Emotional", "Soft", "Aggressive", "Dolce (Manis & Lembut)", "Doloroso (Pedih/Sedih)"],
+    effects: ["Glitch", "FX", "Distortion"],
+    vocals: ["Paduan Suara", "Female", "Glitch Vocals", "Helium Vocals", "Lembut"],
+    tempos: ["60-80 BPM", "Cepat (140+ BPM)", "Accelerando (Semakin Cepat)", "Staccato (Terputus-putus)"],
+    intros: ["Bass-boosted riser", "Viral TikTok intro"],
+    instruments: ["808 Bass", "Synthesizer", "Drum Machine", "Double Bass", "Timpani", "Perkusi Sinematik"],
+    productionRules: "STRICT TIKTOK GEN Z VIRAL AESTHETIC: Orchestral & Megah & Dubstep & 808 Bass & Synthesizer & Drum & heavy metal & Contra Bass & Timpani / drum cinematic & Percussion cinematic impact hit & Sub Bass & Rock remixed for TikTok trends. Mood: Heroik Sinematik Megah Sad Romantic Epik Dreamy Agresif Epic / Dramatic Instrumental Modern Classical. Expression: Maestoso Agung/Mulia Emotional Soft Aggressive Dolce Manis & Lembut Doloroso Pedih/Sedih. Effects: Effect Glitch Effect FX Effect Distortion. Vocals: Choir Female Vocals Effect Glitch Vocals Effect Helium Vocals Lembut. Tempo: 60-80 BPM Cepat 140+ BPM Accelerando Semakin Cepat Staccato Terputus-putus. Intro: Bass-boosted riser Viral TikTok intro. Production Rules: Heavy 808s, crisp high-end, catchy earworm hooks, 15-60s viral segment focus, modern Gen Z sound design, high quality, trending TikTok audio texture."
+  },
+  "Gen Z 5 (Slow Timur)": {
+    genres: ["Pop Timur", "Hibrida Eksperimental"],
+    moods: ["Timur Hybrid", "Melankolis", "Membangkitkan Semangat", "Sinematik", "Megah", "Epik"],
+    emotions: ["Breathy", "Vocal Fry", "Whistle Register", "Emotional", "Dolce (Manis & Lembut)", "Doloroso (Pedih/Sedih)", "Maestoso (Agung/Mulia)"],
+    vocals: ["Duo Pria-Wanita", "Bass Dalam", "Vibrato"],
+    tempos: ["80-100 BPM"],
+    intros: ["Ambient rain intro", "Cinematic strings intro", "Solo Gitar lead"],
+    instruments: ["Oboe", "Klarinet", "French Horn", "Tuba", "808 Bass", "Double Bass", "Timpani", "Celtic Instruments"],
+    productionRules: "STRICT PRODUKSI POP TIMUR HIBRIDA EKSPERIMENTAL: Key F Major, 80-100 BPM. Vokal Duo Pria-Wanita (bass dalam, breathy, vibrato, vocal fry, whistle register). Intro: Ambient rain, cinematic strings, oboe, klarinet, french horn, tuba, lalu gitar menjerit & heavy drum fill. Verse 1-4 (Lo-fi/Trap): Progression F-Dm-Bb-C dengan 808 bass, double bass, neo-soul chords, nuansa melankolis & ritmis ala afrobeats, celtic music. Chorus (Epik Synthwave/Dance Pop): Progression F-Am-Bb-C. Drum megah, drum trap, timpani, gitar distorsi & synthesizer membangkitkan semangat, sangat catchy & emosional walau lirik melankolis. Bridge (Dubstep/Glitch Pop/Experimental Rock): Progression Dm-Bb-F-A7. Sangat agresif & aneh! Wobble bass mendominasi, ketukan patah-patah dipadu jeritan whistle register. Outro: Memudar dengan melodi epik kembali ke ambient rain. Lagu diatur berdurasi ~7 menit via perpanjangan interlude celtic gitar solo melengking, pengulangan chorus dan outro panjang yang emosional. Heavy 808s, modern Gen Z sound design, high quality texture."
+  },
+  "Gen Z 6 (Fast Werwer)": {
+    genres: ["Hyperpop", "EDM", "Trap", "TikTok Viral"],
+    moods: ["Energetic", "Happy", "Agresif"],
+    emotions: ["Powerful", "Emotional", "Aggressive", "Expressive", "Espressivo (Ekspresif)", "Staccato (Terputus-putus)"],
+    effects: ["Reverb", "Distortion", "Chorus"],
+    vocals: ["Female", "Solo", "Scream"],
+    tempos: ["80-100 BPM", "120-140 BPM"],
+    intros: ["Bass drop", "Synth swell", "Drum fill"],
+    instruments: ["808 Bass", "Synthesizer", "Drum Machine"],
+    productionRules: "STRICT TIKTOK GEN Z VIRAL AESTHETIC: Hyperpop & Dance Pop & Hip Hop & House remixed for TikTok trends. Mood: Energetic Happy Aggressive. Expression: Powerful Emotional Aggressive Expressive Espressivo Staccato. Effects: Reverb Distortion Chorus. Vocals: Female Solo Scream. Tempo: 80-100 BPM 120-140 BPM. Intro: Bass drop Synth swell Drum fill. Production Rules: Heavy 808s, crisp high-end, catchy earworm hooks, 15-60s viral segment focus, modern Gen Z sound design, high quality, trending TikTok audio texture."
+  }
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -79,7 +154,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   moods: "Suasana / Mood",
   emotions: "Ekspresi Emosional",
   vocals: "Vokal",
-  tempos: "Tempo"
+  tempos: "Tempo",
+  effects: "Efek Musik"
 };
 
 // --- Types ---
@@ -100,6 +176,8 @@ export default function App() {
   const [modifyLyrics, setModifyLyrics] = useState(true);
   const [isBocilMode, setIsBocilMode] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("4 Menit");
+  const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+  const [showPresets, setShowPresets] = useState(false);
   const [loadingYoutube, setLoadingYoutube] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({
     genres: [],
@@ -108,7 +186,8 @@ export default function App() {
     moods: [],
     emotions: [],
     vocals: [],
-    tempos: []
+    tempos: [],
+    effects: []
   });
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GeneratedResult | null>(null);
@@ -133,6 +212,7 @@ export default function App() {
   }, [history]);
 
   const toggleOption = (category: string, option: string) => {
+    setSelectedPreset(null); // Clear preset if manual selection is made
     setSelectedOptions(prev => {
       const current = prev[category];
       if (current.includes(option)) {
@@ -320,7 +400,9 @@ export default function App() {
       Ekspresi Emosional: ${selectedOptions.emotions.join(', ')}.
       Vokal: ${selectedOptions.vocals.join(', ')}.
       Tempo: ${selectedOptions.tempos.join(', ')}.
-      Target Durasi: ${selectedDuration}.`;
+      Efek: ${selectedOptions.effects.join(', ')}.
+      Target Durasi: ${selectedDuration}.
+      ${selectedPreset ? `Style Remix Preset: ${selectedPreset}. ATURAN PRODUKSI: ${PRESETS[selectedPreset].productionRules}` : ''}`;
 
       // Step 1: Generate Prompt & Lyrics with Fallback & Retry
       const modelsToTry = [
@@ -409,6 +491,7 @@ export default function App() {
   };
 
   const clearSelections = () => {
+    setSelectedPreset(null);
     setSelectedOptions({
       genres: [],
       intros: [],
@@ -416,10 +499,29 @@ export default function App() {
       moods: [],
       emotions: [],
       vocals: [],
-      tempos: []
+      tempos: [],
+      effects: []
     });
     setLyrics('');
     setYoutubeUrl('');
+  };
+
+  const applyPreset = (presetName: string) => {
+    const preset = PRESETS[presetName];
+    if (preset) {
+      setSelectedPreset(presetName);
+      setSelectedOptions({
+        genres: [...(preset.genres || [])],
+        intros: [...(preset.intros || [])],
+        instruments: [...(preset.instruments || [])],
+        moods: [...(preset.moods || [])],
+        emotions: [...(preset.emotions || [])],
+        vocals: [...(preset.vocals || [])],
+        tempos: [...(preset.tempos || [])],
+        effects: [...(preset.effects || [])]
+      });
+    }
+    setShowPresets(false);
   };
 
   const restoreHistoryItem = (item: GeneratedResult) => {
@@ -582,16 +684,59 @@ export default function App() {
                     <p className="text-slate-500 text-xs font-medium">Tentukan karakteristik instrumen & mood</p>
                   </div>
                 </div>
-                <button 
-                  onClick={clearSelections}
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowPresets(!showPresets)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-300 text-xs font-bold ${
+                        selectedPreset 
+                        ? "bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-600/20" 
+                        : "bg-black/20 border-white/5 text-slate-400 hover:border-white/20"
+                      }`}
+                    >
+                      <Sparkles className={`w-4 h-4 ${selectedPreset ? 'animate-pulse' : ''}`} />
+                      {selectedPreset || 'Style Remix'}
+                    </button>
+                    
+                    <AnimatePresence>
+                      {showPresets && (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                          className="absolute right-0 mt-3 w-56 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden"
+                        >
+                          <div className="p-2 border-b border-white/5 bg-white/5">
+                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest px-2">Presets</span>
+                          </div>
+                          <div className="p-1">
+                            {Object.keys(PRESETS).map(presetName => (
+                              <button
+                                key={presetName}
+                                onClick={() => applyPreset(presetName)}
+                                className="w-full text-left px-4 py-3 text-xs font-bold text-slate-300 hover:bg-indigo-600 hover:text-white rounded-xl transition-colors flex items-center justify-between group"
+                              >
+                                {presetName}
+                                <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </button>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <button 
+                    onClick={clearSelections}
                   className="p-2 hover:bg-red-500/10 rounded-xl transition-colors text-slate-500 hover:text-red-400 group"
                   title="Reset Semua"
                 >
                   <Trash2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </button>
               </div>
-              
-              <div className="space-y-10 max-h-[600px] overflow-y-auto pr-6 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+            </div>
+            
+            <div className="space-y-10 max-h-[600px] overflow-y-auto pr-6 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
                 {Object.entries(OPTIONS).map(([key, opts]) => (
                   <div key={key} className="relative">
                     <div className="flex items-center gap-3 mb-4">
