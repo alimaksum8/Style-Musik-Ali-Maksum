@@ -31,13 +31,7 @@ const OPTIONS = {
   intros: [
     "Biola", "Grand Piano", "Saksofon", "Gitar Distorsi", "Gitar Elektrik", "Perkusi Akustik", "Solo Gitar Sustain", "Solo Gitar Bending", "Solo Gitar Vibrato", "Solo Nada Tinggi / Gitar Menjerit", "Solo Gitar Lead",
     "Intro Tematik Main Theme Preview With Solo Gitar Sustain",
-    "Intro Tematik Chorus Preview With Solo Gitar Sustain",
-    "Intro Tematik Main Theme Preview With Solo Biola",
-    "Intro Tematik Chorus Preview With Solo Biola",
-    "Intro Tematik Main Theme Preview With Solo Gitar Lead",
-    "Intro Tematik Chorus Preview With Solo Gitar Lead",
-    "Intro Tematik Main Theme Preview With Saksofon",
-    "Intro Tematik Chorus Preview With Saksofon"
+    "Intro Tematik Chorus Preview With Solo Gitar Sustain"
   ],
   instruments: [
     "Gitar Akustik", "Gitar Elektrik", "Gitar Distorsi", "Gitar Muted", "Gitar Slide", "Gitar 12-Senar", "Gitar Nilon",
@@ -136,16 +130,26 @@ export default function App() {
 
       const ai = new GoogleGenAI({ apiKey });
       
+      const hasSelections = Object.values(selectedOptions).some((arr: any) => arr.length > 0);
+      
       const systemInstruction = `Anda adalah Music Producer AI profesional spesialis prompt musik untuk Suno dan Udio.
       Tugas Anda adalah menganalisis lirik dan pilihan user untuk membuat prompt gaya musik yang sangat akurat dan lirik yang terstruktur.
 
-      ATURAN PENTING UNTUK VOKAL:
-      - JANGAN menyertakan tag "screaming", "shouting", "shouted", atau "aggressive vocals" kecuali user memilih opsi "Berteriak" atau "Growl".
-      - Jika user memilih "Vokal Slowrock Malaysia", gunakan keyword wajib: "emotive melodic vocals", "haunting", "high-pitched soaring vocals", "vibrato", "heartfelt", "mendayu-dayu", "smooth but powerful melodic delivery".
-      - Genre Slow Rock Malaysia (seperti gaya Search, Wings, atau Exist) mengutamakan vokal yang tinggi, melengking secara artistik, dan penuh perasaan (mendayu), BUKAN berteriak kasar.
+      ATURAN PRIORITAS GAYA:
+      - JIKA USER TIDAK MEMILIH APA PUN (Genre/Mood/Instrumen kosong): Buatlah prompt gaya musik yang sangat netral dan minimalis berdasarkan emosi lirik saja (contoh: "melodic, expressive vocals"). JANGAN mengarang genre spesifik (seperti Jazz, Pop, Rock) jika tidak dipilih.
+      - JIKA USER MEMILIH OPSI: Gunakan HANYA kata kunci yang dipilih user sebagai fondasi utama. Anda dilarang menambahkan genre tambahan yang bertentangan dengan pilihan user.
+
+      ATURAN PENTING UNTUK VOKAL & GAYA:
+      - JANGAN menyertakan tag "screaming", "shouting", "shouted", "growl", "aggressive vocals", "death metal", atau "distorted vocals" kecuali user memilih opsi "Berteriak" atau "Growl".
+      - Jika lagu bersifat "Slow" atau "Melankolis", prioritaskan kata: "clean vocals", "clear diction", "soft", "intimate".
+      - Jika user memilih "Vokal Slowrock Malaysia", gunakan keyword wajib: "melodic soaring vocals", "vibrato", "heartfelt", "mendayu-dayu", "smooth powerful melodic delivery", "80s/90s slow rock production". Hindari kesan metal modern yang kasar.
       
+      ATURAN PRODUKSI & REVERB:
+      - JANGAN gunakan "heavy reverb", "massive echo", "washy", atau "underwater sound" kecuali diminta secara spesifik. 
+      - Gunakan "professional studio mix", "balanced reverb", "crisp", "clear mixing" untuk memastikan vokal tidak tenggelam dalam gema.
+
       Buatlah JSON dengan field:
-      1. "style": Prompt teknik musik Suno/Udio (dalam bahasa Inggris). Gabungkan genre, instrumen, mood, vokal, dan tempo ke dalam deskripsi yang koheren.
+      1. "style": Prompt teknik musik Suno/Udio (dalam bahasa Inggris). Gabungkan genre, instrumen, mood, vokal, dan tempo ke dalam deskripsi yang koheren. Gunakan koma untuk memisahkan keyword.
       2. "formattedLyrics": Lirik dengan tag struktur [Verse], [Chorus], [Bridge], [Instrumental Solo], [Outro], dll. 
       
       ${modifyLyrics ? `ATURAN PROTEKSI HAK CIPTA (MODIFIKASI AKTIF):
@@ -156,13 +160,14 @@ export default function App() {
       - JANGAN mengubah kata-kata dalam lirik. Biarkan lirik tetap original sesuai input user.
       - Anda hanya diperbolehkan menambahkan tag struktur seperti [Verse], [Chorus], [Bridge], [Outro], dll.`}`;
 
-      const userPrompt = `Lirik: "${lyrics}". 
-      Genre: ${selectedOptions.genres.join(', ')}. 
-      Intro: ${selectedOptions.intros.join(', ')}. 
-      Instrumen: ${selectedOptions.instruments.join(', ')}. 
-      Suasana/Mood: ${selectedOptions.moods.join(', ')}.
-      Vokal: ${selectedOptions.vocals.join(', ')}.
-      Tempo: ${selectedOptions.tempos.join(', ')}.`;
+      const userPrompt = `Lirik Asli: "${lyrics}"
+      ${hasSelections ? 'Pilihan User:' : 'User tidak memilih opsi apa pun, buat style netral berdasarkan lirik.'}
+      ${selectedOptions.genres.length > 0 ? `- Genre: ${selectedOptions.genres.join(', ')}` : ''}
+      ${selectedOptions.intros.length > 0 ? `- Intro: ${selectedOptions.intros.join(', ')}` : ''}
+      ${selectedOptions.instruments.length > 0 ? `- Instrumen: ${selectedOptions.instruments.join(', ')}` : ''}
+      ${selectedOptions.moods.length > 0 ? `- Suasana/Mood: ${selectedOptions.moods.join(', ')}` : ''}
+      ${selectedOptions.vocals.length > 0 ? `- Vokal: ${selectedOptions.vocals.join(', ')}` : ''}
+      ${selectedOptions.tempos.length > 0 ? `- Tempo: ${selectedOptions.tempos.join(', ')}` : ''}`;
 
       // Step 1: Generate Prompt & Lyrics with Fallback & Retry
       const modelsToTry = [
