@@ -148,11 +148,11 @@ export default function App() {
       1. "style": Prompt teknik musik Suno/Udio (dalam bahasa Inggris). Gabungkan genre, instrumen, mood, vokal, dan tempo ke dalam deskripsi yang koheren.
       2. "formattedLyrics": Lirik dengan tag struktur [Verse], [Chorus], [Bridge], [Instrumental Solo], [Outro], dll. 
       
-      ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK:
-      - Jika satu baris terdiri dari 1 kata: JANGAN diubah.
-      - Jika satu baris terdiri dari 3 atau 4 kata: Ubah 1 kata yang sesuai dan senada.
-      - Jika satu baris terdiri dari 4 kata atau lebih: Ubah 2 kata yang sesuai dan senada.
-      - Pastikan lirik tetap puitis dan mengalir dengan baik.` : `ATURAN LIRIK:
+      ${modifyLyrics ? `ATURAN PROTEKSI HAK CIPTA (MODIFIKASI AKTIF):
+      - TUGAS UTAMA: Tulis ulang (paraphrase) seluruh lirik untuk menghindari deteksi hak cipta (copyright), namun pertahankan "jiwa" dan ritme lagu.
+      - ATURAN JUMLAH KATA: Setiap baris baru yang Anda buat WAJIB memiliki JUMLAH KATA YANG SAMA PERSIS dengan baris lirik asli dari user. Ini kritis untuk menjaga ritme.
+      - Gunakan pilihan kata yang puitis dan memiliki rima/vokal yang senada dengan lirik asli agar "nada" atau flow lagu tetap terasa sama.
+      - Pastikan lirik baru tetap mengalir indah dan memiliki makna yang berdekatan dengan aslinya.` : `ATURAN LIRIK:
       - JANGAN mengubah kata-kata dalam lirik. Biarkan lirik tetap original sesuai input user.
       - Anda hanya diperbolehkan menambahkan tag struktur seperti [Verse], [Chorus], [Bridge], [Outro], dll.`}`;
 
