@@ -59,7 +59,8 @@ const OPTIONS = {
     "Pria", "Wanita", "Serak", "Opera", "Paduan Suara", "Berbisik", "Soulful", "Duo", "Nada Tinggi", "Berteriak", 
     "Bass Dalam", "Auto-tune", "Vocaloid", "Rap", "Growl", "Bernapas", "Harmonisasi", "Furry", "Suara Anak-anak",
     "Falsetto", "Vibrato", "Monoton", "Kata-kata Lisan", "Scat Singing", "Yodeling", "Belting", "Head Voice", "Chest Voice",
-    "Vokal Sopran", "Vokal Seriosa", "Vokal Orkestra", "Vokal Dangdut", "Vokal Slowrock Malaysia", "Chanting"
+    "Vokal Sopran", "Vokal Seriosa", "Vokal Orkestra", "Vokal Dangdut", "Vokal Slowrock Malaysia", "Mendayu", "Power Ballad", 
+    "Emosional", "Lembut", "Chanting"
   ],
   tempos: ["40-60 BPM", "60-80 BPM", "80-100 BPM", "100-120 BPM", "Cepat (140+ BPM)", "Sangat Cepat (180+ BPM)"]
 };
@@ -135,10 +136,17 @@ export default function App() {
 
       const ai = new GoogleGenAI({ apiKey });
       
-      const systemInstruction = `Anda adalah Music Producer AI profesional.
-      Analisis lirik dan pilihan user. Buatlah JSON dengan field:
-      1. "style": Prompt teknik musik Suno/Udio (Inggris).
-      2. "formattedLyrics": Lirik dengan tag struktur [Verse], [Chorus], dll. 
+      const systemInstruction = `Anda adalah Music Producer AI profesional spesialis prompt musik untuk Suno dan Udio.
+      Tugas Anda adalah menganalisis lirik dan pilihan user untuk membuat prompt gaya musik yang sangat akurat dan lirik yang terstruktur.
+
+      ATURAN PENTING UNTUK VOKAL:
+      - JANGAN menyertakan tag "screaming", "shouting", "shouted", atau "aggressive vocals" kecuali user memilih opsi "Berteriak" atau "Growl".
+      - Jika user memilih "Vokal Slowrock Malaysia", gunakan keyword wajib: "emotive melodic vocals", "haunting", "high-pitched soaring vocals", "vibrato", "heartfelt", "mendayu-dayu", "smooth but powerful melodic delivery".
+      - Genre Slow Rock Malaysia (seperti gaya Search, Wings, atau Exist) mengutamakan vokal yang tinggi, melengking secara artistik, dan penuh perasaan (mendayu), BUKAN berteriak kasar.
+      
+      Buatlah JSON dengan field:
+      1. "style": Prompt teknik musik Suno/Udio (dalam bahasa Inggris). Gabungkan genre, instrumen, mood, vokal, dan tempo ke dalam deskripsi yang koheren.
+      2. "formattedLyrics": Lirik dengan tag struktur [Verse], [Chorus], [Bridge], [Instrumental Solo], [Outro], dll. 
       
       ${modifyLyrics ? `ATURAN MODIFIKASI LIRIK:
       - Jika satu baris terdiri dari 1 kata: JANGAN diubah.
@@ -146,7 +154,7 @@ export default function App() {
       - Jika satu baris terdiri dari 4 kata atau lebih: Ubah 2 kata yang sesuai dan senada.
       - Pastikan lirik tetap puitis dan mengalir dengan baik.` : `ATURAN LIRIK:
       - JANGAN mengubah kata-kata dalam lirik. Biarkan lirik tetap original sesuai input user.
-      - Anda hanya diperbolehkan menambahkan tag struktur seperti [Verse], [Chorus], [Bridge], dll.`}`;
+      - Anda hanya diperbolehkan menambahkan tag struktur seperti [Verse], [Chorus], [Bridge], [Outro], dll.`}`;
 
       const userPrompt = `Lirik: "${lyrics}". 
       Genre: ${selectedOptions.genres.join(', ')}. 
