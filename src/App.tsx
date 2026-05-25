@@ -132,13 +132,21 @@ export default function App() {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Server error: ${response.status}`);
+      let data;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.error("Non-JSON response received:", text);
+        throw new Error(`Server returned non-JSON response (${response.status}). Check Vercel logs.`);
       }
 
-      const data = await response.json() as GeneratedResult;
-      setResult(data);
+      if (!response.ok) {
+        throw new Error(data.error || `Server error: ${response.status}`);
+      }
+
+      setResult(data as GeneratedResult);
     } catch (error: any) {
       console.error("Detailed Generation error:", error);
       let errorMessage = "Terjadi kesalahan yang tidak diketahui.";

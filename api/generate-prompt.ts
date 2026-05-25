@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateMusicPrompt } from '../src/lib/gemini';
+import { GoogleGenAI, Type } from "@google/genai";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -8,10 +8,54 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { lyrics, selectedOptions, modifyLyrics } = req.body;
-    const result = await generateMusicPrompt(lyrics, selectedOptions, modifyLyrics);
-    res.status(200).json(result);
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({ error: "GEMINI_API_KEY is not configured in Vercel environment." });
+    }
+
+    const ai = new GoogleGenAI({ apiKey }) as any;
+    const hasSelections = Object.values(selectedOptions || {}).some((arr: any) => Array.isArray(arr) && arr.length > 0);
+    
+    const systemInstruction = `Anda adalah Music Producer AI profesional spesialis prompt musik untuk Suno dan Udio.
+    Tugas Anda adalah menganalisis lirik dan pilihan user untuk membuat prompt gaya musik yang sangat akurat dan lirik yang terstruktur.
+
+    ATURAN PRIORITAS GAYA:
+    - JIKA USER TIDAK MEMILIH APA PUN: Buat style netral berdasarkan emosi lirik.
+    - JIKA USER MEMILIH OPSI: Gunakan HANYA kata kunci tersebut.
+
+    ${modifyLyrics ? `ATURAN PROTEKSI HAK CIPTA & OPTIMASI (MODIFIKASI AKTIF):
+    - TUGAS UTAMA: Tulis ulang lirik (paraphrase) untuk menghindari deteksi hak cipta namun pertahankan ritme.
+    - DISTORSI EJAAN: Gunakan tanda hubung secara fonetik untuk kata pemicu (Contoh: "Mimpi" -> "Miym-piy").
+    - SINONIM: Ganti 1-2 kata populer dengan sinonim puitis.
+    - JUMLAH KATA: WAJIB sama per baris.` : `ATURAN LIRIK: JANGAN ubah kata-kata lirik. Gunakan tag [Verse], [Chorus], dll.`}`;
+
+    const userPrompt = `Lirik: "${lyrics}"
+    Opsi: ${JSON.stringify(selectedOptions)}`;
+
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction } as any);
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            style: { type: Type.STRING },
+            formattedLyrics: { type: Type.STRING }
+          },
+          required: ["style", "formattedLyrics"]
+        }
+      }
+    } as any);
+
+    const responseText = result.response.text();
+    res.status(200).json(JSON.parse(responseText));
   } catch (error: any) {
-    console.error('Vercel API Error:', error);
-    res.status(500).json({ error: error.message || 'Internal Server Error' });
+    console.error('Vercel API Detailed Error:', error);
+    res.status(500).json({ 
+      error: error.message || 'Internal Server Error',
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined 
+    });
   }
 }
