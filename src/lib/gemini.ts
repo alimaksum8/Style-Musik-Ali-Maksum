@@ -7,9 +7,16 @@ export async function generateMusicPrompt(lyrics: string, selectedOptions: any, 
     throw new Error("GEMINI_API_KEY is not configured.");
   }
 
-  const ai = new GoogleGenAI({ apiKey }) as any;
+  const ai = new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'aistudio-build',
+      }
+    }
+  }) as any;
   
-  const hasSelections = Object.values(selectedOptions).some((arr: any) => arr.length > 0);
+  const hasSelections = Object.values(selectedOptions).some((arr: any) => Array.isArray(arr) && arr.length > 0);
   
   const systemInstruction = `Anda adalah Music Producer AI profesional spesialis prompt musik untuk Suno dan Udio.
   Tugas Anda adalah menganalisis lirik dan pilihan user untuk membuat prompt gaya musik yang sangat akurat dan lirik yang terstruktur.
@@ -50,20 +57,23 @@ export async function generateMusicPrompt(lyrics: string, selectedOptions: any, 
   ${selectedOptions.tempos?.length > 0 ? `- Tempo: ${selectedOptions.tempos.join(', ')}` : ''}`;
 
   const modelsToTry = [
+    "gemini-3.5-flash",
+    "gemini-3.1-pro-preview",
+    "gemini-3.1-flash-lite",
     "gemini-2.0-flash-exp", 
-    "gemini-1.5-flash",
-    "gemini-1.5-pro"
+    "gemini-1.5-flash"
   ];
   
-  let resultResponse = null;
+  let responseText = "";
   let lastError = null;
 
   for (const modelName of modelsToTry) {
     try {
-      const model = ai.getGenerativeModel({ model: modelName, systemInstruction } as any);
-      const result = await model.generateContent({
+      const response = await ai.models.generateContent({
+        model: modelName,
         contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-        generationConfig: {
+        config: {
+          systemInstruction,
           responseMimeType: "application/json",
           responseSchema: {
             type: Type.OBJECT,
@@ -75,17 +85,18 @@ export async function generateMusicPrompt(lyrics: string, selectedOptions: any, 
           }
         }
       } as any);
-      resultResponse = result.response;
-      if (resultResponse) break;
+      
+      responseText = response.text;
+      if (responseText) break;
     } catch (err) {
       lastError = err;
       console.error(`Error with model ${modelName}:`, err);
     }
   }
 
-  if (!resultResponse) {
+  if (!responseText) {
     throw lastError || new Error("All models failed.");
   }
 
-  return JSON.parse(resultResponse.text());
+  return JSON.parse(responseText);
 }
