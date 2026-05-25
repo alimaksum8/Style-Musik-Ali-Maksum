@@ -4,7 +4,6 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { GoogleGenAI, Type } from "@google/genai";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Music, 
@@ -121,118 +120,26 @@ export default function App() {
     setResult(null);
 
     try {
-      // Logika pengambilan API Key yang lebih kuat
-      let apiKey = process.env.GEMINI_API_KEY;
+      const response = await fetch('/api/generate-prompt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lyrics,
+          selectedOptions,
+          modifyLyrics
+        }),
+      });
 
-      if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "undefined" || apiKey === "") {
-        throw new Error("API Key Gemini tidak ditemukan. Silakan masukkan API Key Anda di panel Secrets AI Studio.");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Server error: ${response.status}`);
       }
 
-      const ai = new GoogleGenAI({ apiKey });
-      
-      const hasSelections = Object.values(selectedOptions).some((arr: any) => arr.length > 0);
-      
-      const systemInstruction = `Anda adalah Music Producer AI profesional spesialis prompt musik untuk Suno dan Udio.
-      Tugas Anda adalah menganalisis lirik dan pilihan user untuk membuat prompt gaya musik yang sangat akurat dan lirik yang terstruktur.
-
-      ATURAN PRIORITAS GAYA:
-      - JIKA USER TIDAK MEMILIH APA PUN (Genre/Mood/Instrumen kosong): Buatlah prompt gaya musik yang sangat netral dan minimalis berdasarkan emosi lirik saja (contoh: "melodic, expressive vocals"). JANGAN mengarang genre spesifik (seperti Jazz, Pop, Rock) jika tidak dipilih.
-      - JIKA USER MEMILIH OPSI: Gunakan HANYA kata kunci yang dipilih user sebagai fondasi utama. Anda dilarang menambahkan genre tambahan yang bertentangan dengan pilihan user.
-
-      ATURAN PENTING UNTUK VOKAL & GAYA:
-      - JANGAN menyertakan tag "screaming", "shouting", "shouted", "growl", "aggressive vocals", "death metal", atau "distorted vocals" kecuali user memilih opsi "Berteriak" atau "Growl".
-      - Jika lagu bersifat "Slow" atau "Melankolis", prioritaskan kata: "clean vocals", "clear diction", "soft", "intimate".
-      - Jika user memilih "Vokal Slowrock Malaysia", gunakan keyword wajib: "melodic soaring vocals", "vibrato", "heartfelt", "mendayu-dayu", "smooth powerful melodic delivery", "80s/90s slow rock production". Hindari kesan metal modern yang kasar.
-      
-      ATURAN PRODUKSI & REVERB:
-      - JANGAN gunakan "heavy reverb", "massive echo", "washy", atau "underwater sound" kecuali diminta secara spesifik. 
-      - Gunakan "professional studio mix", "balanced reverb", "crisp", "clear mixing" untuk memastikan vokal tidak tenggelam dalam gema.
-
-      Buatlah JSON dengan field:
-      1. "style": Prompt teknik musik Suno/Udio (dalam bahasa Inggris). Gabungkan genre, instrumen, mood, vokal, dan tempo ke dalam deskripsi yang koheren. Gunakan koma untuk memisahkan keyword.
-      2. "formattedLyrics": Lirik dengan tag struktur [Verse], [Chorus], [Bridge], [Instrumental Solo], [Outro], dll. 
-      
-      ${modifyLyrics ? `ATURAN PROTEKSI HAK CIPTA (MODIFIKASI AKTIF):
-      - TUGAS UTAMA: Tulis ulang (paraphrase) seluruh lirik untuk menghindari deteksi hak cipta (copyright), namun pertahankan "jiwa" dan ritme lagu.
-      - ATURAN JUMLAH KATA: Setiap baris baru yang Anda buat WAJIB memiliki JUMLAH KATA YANG SAMA PERSIS dengan baris lirik asli dari user. Ini kritis untuk menjaga ritme.
-      - Gunakan pilihan kata yang puitis dan memiliki rima/vokal yang senada dengan lirik asli agar "nada" atau flow lagu tetap terasa sama.
-      - Pastikan lirik baru tetap mengalir indah dan memiliki makna yang berdekatan dengan aslinya.` : `ATURAN LIRIK:
-      - JANGAN mengubah kata-kata dalam lirik. Biarkan lirik tetap original sesuai input user.
-      - Anda hanya diperbolehkan menambahkan tag struktur seperti [Verse], [Chorus], [Bridge], [Outro], dll.`}`;
-
-      const userPrompt = `Lirik Asli: "${lyrics}"
-      ${hasSelections ? 'Pilihan User:' : 'User tidak memilih opsi apa pun, buat style netral berdasarkan lirik.'}
-      ${selectedOptions.genres.length > 0 ? `- Genre: ${selectedOptions.genres.join(', ')}` : ''}
-      ${selectedOptions.intros.length > 0 ? `- Intro: ${selectedOptions.intros.join(', ')}` : ''}
-      ${selectedOptions.instruments.length > 0 ? `- Instrumen: ${selectedOptions.instruments.join(', ')}` : ''}
-      ${selectedOptions.moods.length > 0 ? `- Suasana/Mood: ${selectedOptions.moods.join(', ')}` : ''}
-      ${selectedOptions.vocals.length > 0 ? `- Vokal: ${selectedOptions.vocals.join(', ')}` : ''}
-      ${selectedOptions.tempos.length > 0 ? `- Tempo: ${selectedOptions.tempos.join(', ')}` : ''}`;
-
-      // Step 1: Generate Prompt & Lyrics with Fallback & Retry
-      const modelsToTry = [
-        "gemini-2.5-flash-preview", 
-        "gemini-3.1-flash-lite-preview",
-        "gemini-3-flash-preview", 
-        "gemini-3.1-pro-preview"
-      ];
-      
-      let response = null;
-      let lastError = null;
-
-      for (const modelName of modelsToTry) {
-        let retries = 0;
-        const maxRetries = 2;
-
-        while (retries <= maxRetries) {
-          try {
-            response = await ai.models.generateContent({
-              model: modelName,
-              contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-              config: {
-                systemInstruction,
-                responseMimeType: "application/json",
-                responseSchema: {
-                  type: Type.OBJECT,
-                  properties: {
-                    style: { type: Type.STRING },
-                    formattedLyrics: { type: Type.STRING }
-                  },
-                  required: ["style", "formattedLyrics"]
-                }
-              }
-            });
-            if (response) break; 
-          } catch (err: any) {
-            lastError = err;
-            const is503 = err?.message?.includes("503") || err?.message?.includes("UNAVAILABLE");
-            
-            if (is503 && retries < maxRetries) {
-              retries++;
-              console.warn(`Model ${modelName} sibuk (503), mencoba ulang ke-${retries}...`);
-              await new Promise(resolve => setTimeout(resolve, 2000)); // Tunggu 2 detik
-              continue;
-            }
-            
-            console.warn(`Model ${modelName} gagal (${err?.message}), mencoba model berikutnya...`);
-            break; // Lanjut ke model berikutnya di list modelsToTry
-          }
-        }
-        if (response) break; // Jika sudah berhasil dengan satu model, berhenti
-      }
-
-      if (!response || !response.text) {
-        const isQuotaError = lastError?.message?.includes("429") || lastError?.message?.includes("quota");
-        const finalMessage = isQuotaError 
-          ? "Kuota API Gratis Anda telah habis atau mencapai batas limit menit. Silakan tunggu 1-2 menit lalu coba lagi."
-          : "Semua model AI sedang sibuk karena trafik tinggi dari Google. Silakan coba lagi dalam beberapa saat.";
-        throw new Error(finalMessage);
-      }
-
-      const data = JSON.parse(response.text) as GeneratedResult;
+      const data = await response.json() as GeneratedResult;
       setResult(data);
-
-    } catch (error) {
+    } catch (error: any) {
       console.error("Detailed Generation error:", error);
       let errorMessage = "Terjadi kesalahan yang tidak diketahui.";
       
