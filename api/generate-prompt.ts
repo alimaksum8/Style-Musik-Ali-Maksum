@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { generateMusicPrompt } from '../src/lib/gemini.js';
+import { generateMusicPrompt } from '../src/lib/gemini';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
