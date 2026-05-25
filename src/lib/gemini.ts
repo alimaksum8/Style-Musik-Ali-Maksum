@@ -14,7 +14,7 @@ export async function generateMusicPrompt(lyrics: string, selectedOptions: any, 
         'User-Agent': 'aistudio-build',
       }
     }
-  }) as any;
+  });
   
   const hasSelections = Object.values(selectedOptions).some((arr: any) => Array.isArray(arr) && arr.length > 0);
   
@@ -59,9 +59,7 @@ export async function generateMusicPrompt(lyrics: string, selectedOptions: any, 
   const modelsToTry = [
     "gemini-3.5-flash",
     "gemini-3.1-pro-preview",
-    "gemini-3.1-flash-lite",
-    "gemini-2.0-flash-exp", 
-    "gemini-1.5-flash"
+    "gemini-3.1-flash-lite"
   ];
   
   let responseText = "";
@@ -71,7 +69,7 @@ export async function generateMusicPrompt(lyrics: string, selectedOptions: any, 
     try {
       const response = await ai.models.generateContent({
         model: modelName,
-        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        contents: userPrompt,
         config: {
           systemInstruction,
           responseMimeType: "application/json",
@@ -84,9 +82,9 @@ export async function generateMusicPrompt(lyrics: string, selectedOptions: any, 
             required: ["style", "formattedLyrics"]
           }
         }
-      } as any);
+      });
       
-      responseText = response.text;
+      responseText = response.text || "";
       if (responseText) break;
     } catch (err) {
       lastError = err;
