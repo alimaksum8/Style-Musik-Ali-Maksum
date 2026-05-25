@@ -33,23 +33,46 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const userPrompt = `Lirik: "${lyrics}"
     Opsi: ${JSON.stringify(selectedOptions)}`;
 
-    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction } as any);
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            style: { type: Type.STRING },
-            formattedLyrics: { type: Type.STRING }
-          },
-          required: ["style", "formattedLyrics"]
-        }
-      }
-    } as any);
+    const modelsToTry = [
+      "gemini-2.0-flash-exp",
+      "gemini-1.5-flash-8b",
+      "gemini-1.5-flash",
+      "gemini-1.5-pro"
+    ];
 
-    const responseText = result.response.text();
+    let responseText = "";
+    let lastError = null;
+
+    for (const modelName of modelsToTry) {
+      try {
+        const model = ai.getGenerativeModel({ model: modelName, systemInstruction } as any);
+        const result = await model.generateContent({
+          contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                style: { type: Type.STRING },
+                formattedLyrics: { type: Type.STRING }
+              },
+              required: ["style", "formattedLyrics"]
+            }
+          }
+        } as any);
+
+        responseText = result.response.text();
+        if (responseText) break;
+      } catch (err) {
+        lastError = err;
+        console.error(`Error with model ${modelName}:`, err);
+      }
+    }
+
+    if (!responseText) {
+      throw lastError || new Error("All models failed.");
+    }
+
     res.status(200).json(JSON.parse(responseText));
   } catch (error: any) {
     console.error('Vercel API Detailed Error:', error);
